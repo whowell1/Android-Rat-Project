@@ -6,6 +6,24 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+
+
+
+
+
+
+
+
+
+
+//
+
+/*
+This is the class that handles all of the login
+
+
+ */
+
 public class LoginSuccess extends AppCompatActivity {
     private Button Logout;
 
@@ -16,7 +34,7 @@ public class LoginSuccess extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
         Logout = (Button) findViewById(R.id.logoutBtn);
-        Logout.setOnClickListener(new View.OnClickListener(){
+        Logout.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
                 Intent intent = new Intent(LoginSuccess.this, MainActivity.class);
