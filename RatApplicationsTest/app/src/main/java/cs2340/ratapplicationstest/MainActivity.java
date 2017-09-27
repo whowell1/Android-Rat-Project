@@ -13,6 +13,10 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    //These are the fields that we needed intialized here.
+    // username, password, Info is how many attempts we have left
+    // Button for Login
+
     private EditText Name;
     private EditText Password;
     private TextView Info;
@@ -20,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private int counter = 0;
     @Override
 
-    // Initializes the fields that I need for login.
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         Info = (TextView)findViewById(R.id.tvInfo);
         Login = (Button) findViewById(R.id.loginBtn);
 
-        Info.setText("No of attempts remaining: 7 ");
+        Info.setText("No of attempts remaining: 3 ");
 
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /*
+    Method that validates username and password. Right now, it only checks is "user" is equal to the
+    * the password which is pass. The if loop does this check and if it is, there a new screen that
+    * appears which is an intent
+     */
 
     private void validate(String userName, String userPassword) {
 
