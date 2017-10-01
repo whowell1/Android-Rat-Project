@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView Info;
     private Button Login;
     private Button Signup;
-    private int counter = 0;
+    private int counter = 3;
+    private UserDatabase userDB;
     @Override
 
 
@@ -33,6 +34,14 @@ public class MainActivity extends AppCompatActivity {
         Password= (EditText)findViewById(R.id.etPassword);
         Info = (TextView)findViewById(R.id.tvInfo);
         Login = (Button) findViewById(R.id.loginBtn);
+
+        System.out.println("Check: " + getIntent());
+        if(getIntent().getSerializableExtra("userDB") != null) {
+            userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
+        } else {
+            System.out.println("--------------failure---------------");
+            userDB = new UserDatabase();
+        }
 
         Info.setText("No of attempts remaining: 3 ");
 
@@ -51,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SignupPage.class);
+                intent.putExtra("userDB", userDB);
                 startActivity(intent);
             }
         });
@@ -65,8 +75,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void validate(String userName, String userPassword) {
 
-        if ((userName.equals("user")) && (userPassword.equals("pass"))){
+        if (userDB.checkPassword(userName, userPassword)){
             Intent intent = new Intent(MainActivity.this, LoginSuccess.class);
+            intent.putExtra("userDB", userDB);
             startActivity(intent);
         } else {
             Toast.makeText(this,"Improper Login", Toast.LENGTH_LONG).show();

@@ -24,6 +24,7 @@ public class SignupPage extends AppCompatActivity {
     private EditText Name;
     private EditText Password;
     private Button Signup;
+    private UserDatabase userDB;
     @Override
 
 
@@ -40,6 +41,11 @@ public class SignupPage extends AppCompatActivity {
                 validate(Name.getText().toString(),Password.getText().toString());
             }
         });
+
+        System.out.println("Check: " + getIntent());
+        userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
+        System.out.println("Check: " + getIntent().getSerializableExtra("userDB"));
+
     }
 
 
@@ -50,9 +56,10 @@ public class SignupPage extends AppCompatActivity {
      */
 
     private void validate(String userName, String userPassword) {
-
         if ((userName.contains("@") && userPassword.length() >= 7)){
+            userDB.addUser(userName,userPassword);
             Intent intent = new Intent(SignupPage.this, LoginSuccess.class);
+            intent.putExtra("userDB", userDB);
             startActivity(intent);
         } else  if(!userName.contains("@")) {
             Toast.makeText(this,"Must enter a valid email", Toast.LENGTH_LONG).show();

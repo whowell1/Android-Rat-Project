@@ -26,6 +26,7 @@ This is the class that handles all of the login
 
 public class LoginSuccess extends AppCompatActivity {
     private Button Logout;
+    private UserDatabase userDB;
 
 
 
@@ -33,11 +34,15 @@ public class LoginSuccess extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
+        userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
+        System.out.println("Check " + getIntent());
+
         Logout = (Button) findViewById(R.id.logoutBtn);
         Logout.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
                 Intent intent = new Intent(LoginSuccess.this, MainActivity.class);
+                intent.putExtra("userDB", userDB);
                 startActivity(intent);
             }
         });
