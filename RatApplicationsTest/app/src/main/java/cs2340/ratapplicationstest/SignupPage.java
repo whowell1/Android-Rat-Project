@@ -8,8 +8,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ArrayAdapter;
 
 /**
  * Created by thoma on 9/29/2017.
@@ -25,6 +27,7 @@ public class SignupPage extends AppCompatActivity {
     private EditText Password;
     private Button Signup;
     private Button Back;
+    private Spinner AdminSpinner;
     private UserDatabase userDB;
     @Override
 
@@ -53,6 +56,13 @@ public class SignupPage extends AppCompatActivity {
             }
         });
 
+
+        AdminSpinner = (Spinner) findViewById(R.id.adminSpinner);
+        String[] adminArr = {"User", "Admin"};
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, adminArr);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        AdminSpinner.setAdapter(adapter);
+
         userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
     }
 
@@ -65,11 +75,13 @@ public class SignupPage extends AppCompatActivity {
 
     private void validate(String userName, String userPassword) {
         if ((userName.contains("@") && userPassword.length() >= 7)){
-            if(!userDB.addUser(userName,userPassword)) {
+
+            if(!userDB.addUser(userName, userPassword, AdminSpinner.getSelectedItem().equals("Admin"))) {
                 Toast.makeText(this,"User already exists", Toast.LENGTH_LONG).show();
             }else {
                 Intent intent = new Intent(SignupPage.this, LoginSuccess.class);
                 intent.putExtra("userDB", userDB);
+                intent.putExtra("userID", userName);
                 startActivity(intent);
             }
         } else  if(!userName.contains("@")) {

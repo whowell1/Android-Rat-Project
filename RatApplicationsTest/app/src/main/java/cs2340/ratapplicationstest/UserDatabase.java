@@ -9,28 +9,39 @@ import java.util.HashMap;
 
 public class UserDatabase implements Serializable {
 
-    private HashMap<String, String> map;
+    private HashMap<String, String> passMap;
+    private HashMap<String, Boolean> adminMap;
 
 
     public UserDatabase() {
-        map = new HashMap<String,String>();
-        map.put("user", "pass");
+        passMap = new HashMap<String,String>();
+        passMap.put("user", "pass");
+        adminMap = new HashMap<String, Boolean>();
+        adminMap.put("user", true);
     }
     public boolean addUser(String id, String password) {
-        if(map.containsKey(id)) {
+        return addUser(id, password, false);
+
+    }
+    public boolean addUser(String id, String password, boolean isAdmin) {
+        if(passMap.containsKey(id)) {
             return false;
         } else {
-            map.put(id, password);
+            passMap.put(id, password);
+            adminMap.put(id, isAdmin);
             return true;
         }
     }
     public boolean checkPassword(String id, String password) {
-        if(!map.containsKey(id)) {
+        if(!passMap.containsKey(id)) {
             return false;
-        } else if(map.get(id).equals(password)) {
+        } else if(passMap.get(id).equals(password)) {
             return true;
         } else {
             return false;
         }
+    }
+    public boolean isAdmin(String id) {
+        return adminMap.get(id);
     }
 }

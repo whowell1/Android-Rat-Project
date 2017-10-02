@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         if (userDB.checkPassword(userName, userPassword)){
             Intent intent = new Intent(MainActivity.this, LoginSuccess.class);
             intent.putExtra("userDB", userDB);
+            intent.putExtra("userID", userName);
             startActivity(intent);
         } else {
             Toast.makeText(this,"Improper Login", Toast.LENGTH_LONG).show();
