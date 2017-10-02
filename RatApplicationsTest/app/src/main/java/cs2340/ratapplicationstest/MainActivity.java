@@ -32,18 +32,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Name = (EditText)findViewById(R.id.etName);
         Password= (EditText)findViewById(R.id.etPassword);
-        Info = (TextView)findViewById(R.id.tvInfo);
+        Info = (TextView)findViewById(R.id.numAttempts);
         Login = (Button) findViewById(R.id.loginBtn);
 
-        System.out.println("Check: " + getIntent());
         if(getIntent().getSerializableExtra("userDB") != null) {
             userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
         } else {
-            System.out.println("--------------failure---------------");
             userDB = new UserDatabase();
         }
 
-        Info.setText("No of attempts remaining: 3 ");
+        Info.setText("");
 
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
         Signup = (Button) findViewById(R.id.signupBtn);
 
-        Info.setText("No of attempts remaining: 3 ");
 
         Signup.setOnClickListener(new View.OnClickListener() {
             @Override

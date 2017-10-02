@@ -24,6 +24,7 @@ public class SignupPage extends AppCompatActivity {
     private EditText Name;
     private EditText Password;
     private Button Signup;
+    private Button Back;
     private UserDatabase userDB;
     @Override
 
@@ -34,6 +35,7 @@ public class SignupPage extends AppCompatActivity {
         Name = (EditText)findViewById(R.id.etName);
         Password= (EditText)findViewById(R.id.etPassword);
         Signup = (Button) findViewById(R.id.signupBtn);
+        Back = (Button) findViewById(R.id.backBtn);
 
         Signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,10 +44,16 @@ public class SignupPage extends AppCompatActivity {
             }
         });
 
-        System.out.println("Check: " + getIntent());
-        userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
-        System.out.println("Check: " + getIntent().getSerializableExtra("userDB"));
+        Back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SignupPage.this, MainActivity.class);
+                intent.putExtra("userDB", userDB);
+                startActivity(intent);
+            }
+        });
 
+        userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
     }
 
 
@@ -57,10 +65,13 @@ public class SignupPage extends AppCompatActivity {
 
     private void validate(String userName, String userPassword) {
         if ((userName.contains("@") && userPassword.length() >= 7)){
-            userDB.addUser(userName,userPassword);
-            Intent intent = new Intent(SignupPage.this, LoginSuccess.class);
-            intent.putExtra("userDB", userDB);
-            startActivity(intent);
+            if(!userDB.addUser(userName,userPassword)) {
+                Toast.makeText(this,"User already exists", Toast.LENGTH_LONG).show();
+            }else {
+                Intent intent = new Intent(SignupPage.this, LoginSuccess.class);
+                intent.putExtra("userDB", userDB);
+                startActivity(intent);
+            }
         } else  if(!userName.contains("@")) {
             Toast.makeText(this,"Must enter a valid email", Toast.LENGTH_LONG).show();
         } else {
