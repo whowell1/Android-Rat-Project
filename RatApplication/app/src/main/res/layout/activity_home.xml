@@ -22,4 +22,13 @@
         android:text="logout"
         tools:layout_editor_absoluteX="148dp"
         tools:layout_editor_absoluteY="94dp" />
+
+    <Button
+        android:id="@+id/reportBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Report"
+        tools:layout_editor_absoluteY="94dp"
+        app:layout_constraintLeft_toRightOf="@+id/logoutBtn"
+        android:layout_marginLeft="25dp" />
 </android.support.constraint.ConstraintLayout>
