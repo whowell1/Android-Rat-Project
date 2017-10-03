@@ -50,7 +50,7 @@ public class SignupPage extends AppCompatActivity {
         Back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SignupPage.this, MainActivity.class);
+                Intent intent = new Intent(SignupPage.this, LoginPage.class);
                 intent.putExtra("userDB", userDB);
                 startActivity(intent);
             }
@@ -79,7 +79,7 @@ public class SignupPage extends AppCompatActivity {
             if(!userDB.addUser(userName, userPassword, AdminSpinner.getSelectedItem().equals("Admin"))) {
                 Toast.makeText(this,"User already exists", Toast.LENGTH_LONG).show();
             }else {
-                Intent intent = new Intent(SignupPage.this, LoginSuccess.class);
+                Intent intent = new Intent(SignupPage.this, HomePage.class);
                 intent.putExtra("userDB", userDB);
                 intent.putExtra("userID", userName);
                 startActivity(intent);

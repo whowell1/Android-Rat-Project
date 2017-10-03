@@ -11,8 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
-
+public class LoginPage extends AppCompatActivity {
     //These are the fields that we needed intialized here.
     // username, password, Info is how many attempts we have left
     // Button for Login
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         Signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SignupPage.class);
+                Intent intent = new Intent(LoginPage.this, SignupPage.class);
                 intent.putExtra("userDB", userDB);
                 startActivity(intent);
             }
@@ -73,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private void validate(String userName, String userPassword) {
 
         if (userDB.checkPassword(userName, userPassword)){
-            Intent intent = new Intent(MainActivity.this, LoginSuccess.class);
+            Intent intent = new Intent(LoginPage.this, HomePage.class);
             intent.putExtra("userDB", userDB);
             intent.putExtra("userID", userName);
             startActivity(intent);
