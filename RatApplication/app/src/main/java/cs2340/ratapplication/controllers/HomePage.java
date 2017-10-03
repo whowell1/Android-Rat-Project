@@ -21,6 +21,7 @@ This is the class that handles all of the login
 
 public class HomePage extends AppCompatActivity {
     private Button Logout;
+    private Button Report;
     private UserDatabase userDB;
     private TextView textView;
     private String username;
@@ -33,11 +34,27 @@ public class HomePage extends AppCompatActivity {
         username = getIntent().getStringExtra("userID");
         textView = (TextView) findViewById(R.id.isAdmin);
         Logout = (Button) findViewById(R.id.logoutBtn);
+        Report = (Button) findViewById(R.id.reportBtn);
+
+
+
+
         Logout.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
                 Intent intent = new Intent(HomePage.this, LoginPage.class);
                 intent.putExtra("userDB", userDB);
+                startActivity(intent);
+            }
+        });
+
+
+        Report.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                Intent intent = new Intent(HomePage.this, ReportPage.class);
+                intent.putExtra("userDB", userDB);
+                intent.putExtra("userID", username);
                 startActivity(intent);
             }
         });
