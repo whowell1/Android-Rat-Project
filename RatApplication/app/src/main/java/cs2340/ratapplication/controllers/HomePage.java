@@ -7,6 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import cs2340.ratapplication.models.UserDatabase;
 import cs2340.ratapplication.R;
 
@@ -61,6 +65,28 @@ public class HomePage extends AppCompatActivity {
 
         if(userDB.isAdmin(username)) {
             textView.setText("Admin Account");
+        }
+
+
+        try {
+            loadData();
+        }catch(Throwable t){}
+
+    }
+
+    protected void loadData() throws FileNotFoundException{
+        Scanner dataFile = new Scanner(new File("/Users/data.csv")); //change this to look at ratdata.csv
+        dataFile.useDelimiter(",");
+        int counter = 0;
+        String[] data = new String[10];
+        while(dataFile.hasNext()) {
+            counter = 0;
+            data = new String[10];
+            while (counter < data.length && dataFile.hasNext()) {
+                data[counter] = dataFile.next();
+                counter++;
+            }
+            userDB.addSighting(data[0],data[1],data[7],data[9]);
         }
 
     }
