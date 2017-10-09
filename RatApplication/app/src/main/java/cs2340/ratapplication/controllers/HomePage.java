@@ -11,8 +11,10 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import cs2340.ratapplication.models.UserDatabase;
+//import cs2340.ratapplication.models.UserDatabase;
+import cs2340.ratapplication.models.DatabaseHelper;
 import cs2340.ratapplication.R;
+
 
 
 //
@@ -26,15 +28,17 @@ This is the class that handles all of the login
 public class HomePage extends AppCompatActivity {
     private Button Logout;
     private Button Report;
-    private UserDatabase userDB;
+    //private UserDatabase userDB;
     private TextView textView;
     private String username;
+    private DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
+        //userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
         username = getIntent().getStringExtra("userID");
         textView = (TextView) findViewById(R.id.isAdmin);
         Logout = (Button) findViewById(R.id.logoutBtn);
@@ -47,7 +51,7 @@ public class HomePage extends AppCompatActivity {
 
             public void onClick(View view) {
                 Intent intent = new Intent(HomePage.this, LoginPage.class);
-                intent.putExtra("userDB", userDB);
+                //intent.putExtra("userDB", userDB);
                 startActivity(intent);
             }
         });
@@ -57,13 +61,13 @@ public class HomePage extends AppCompatActivity {
 
             public void onClick(View view) {
                 Intent intent = new Intent(HomePage.this, ReportPage.class);
-                intent.putExtra("userDB", userDB);
+                //intent.putExtra("userDB", userDB);
                 intent.putExtra("userID", username);
                 startActivity(intent);
             }
         });
 
-        if(userDB.isAdmin(username)) {
+        if(dbHelper.isAdmin(username)) {
             textView.setText("Admin Account");
         }
 
@@ -86,7 +90,7 @@ public class HomePage extends AppCompatActivity {
                 data[counter] = dataFile.next();
                 counter++;
             }
-            userDB.addSighting(data[0],data[1],data[7],data[9]);
+            //dbHelper.addSighting();
         }
 
     }

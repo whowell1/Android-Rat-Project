@@ -1,6 +1,8 @@
 package cs2340.ratapplication.models;
 
 //import android.database.sqlite.SQLiteOpenHelper;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.*;
 import android.content.Context;
 
@@ -35,13 +37,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_USER_ID = "id";
     private static final String KEY_USER_NAME = "userName";
     private static final String KEY_USER_PASSWORD = "password";
+    private static final String KEY_USER_ISADMIN = "isAdmin";
 
     public static synchronized DatabaseHelper getInstance(Context context) {
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
         // See this article for more information: http://bit.ly/6LRzfx
         if (sInstance == null) {
-            sInstance = new DatabaseHelper(context.getApplicationContext());
+            System.out.println("DATABASE CREATED-----------------------------------");
+            sInstance = new DatabaseHelper(context);
         }
         return sInstance;
     }
@@ -70,7 +74,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "(" +
                 KEY_USER_ID + " INTEGER PRIMARY KEY," +
                 KEY_USER_NAME + " TEXT," +
-                KEY_USER_PASSWORD + " TEXT" +
+                KEY_USER_PASSWORD + " TEXT," +
+                KEY_USER_ISADMIN + " BOOLEAN" +
                 ")";
 
         String CREATE_POSTS_TABLE = "CREATE TABLE " + TABLE_SIGHTINGS +
@@ -87,6 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 KEY_SIGHTINGS_LONG + " FLOAT(5)" +
                 ")";
 
+        System.out.println("Create Table: " + CREATE_USERS_TABLE);
         db.execSQL(CREATE_POSTS_TABLE);
         db.execSQL(CREATE_USERS_TABLE);
     }
@@ -103,7 +109,111 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             onCreate(db);
         }
     }
-}
 
+    public void destroyPreviousDB() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SIGHTINGS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        onCreate(db);
+    }
 
+    public boolean addUser(String username, String password) {
+        return addUser(username, password, false);
+
+    }
+    public boolean addUser(String username, String password, boolean isAdmin) {
+        username = username.trim();
+        password = password.trim();
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+
+        String USER_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%s'",
+        TABLE_USERS,
+        TABLE_USERS, KEY_USER_NAME,
+        username);
+        Cursor cursor = db.rawQuery(USER_QUERY,null);
+        try {
+            if(cursor.moveToFirst()) {
+                db.endTransaction();
+                return false;
+            } else {
+                ContentValues values = new ContentValues();
+                values.put(KEY_USER_NAME, username);
+                values.put(KEY_USER_PASSWORD, password);
+                values.put(KEY_USER_ISADMIN, isAdmin);
+
+                db.insert(TABLE_USERS, null, values); //null to autoincrement primary key
+                db.setTransactionSuccessful();
+                db.endTransaction();
+                return true;
+            }
+        } catch(Throwable t) {
+            db.endTransaction();
+            System.out.println("Error: "+ t.getMessage());
+            return false;
+        }
+    }
+
+    public boolean checkPassword(String username, String password) {
+        username = username.trim();
+        password = password.trim();
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+
+        String USER_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%s'",
+                TABLE_USERS,
+                TABLE_USERS, KEY_USER_NAME,
+                username);
+        Cursor cursor = db.rawQuery(USER_QUERY,null);
+        try {
+            if(cursor.moveToFirst()) {
+                if(cursor.getString(2).equals(password)) {
+                    db.setTransactionSuccessful();
+                    db.endTransaction();
+                    return true;
+                }
+            } else {
+                db.setTransactionSuccessful();
+                db.endTransaction();
+                return false;
+            }
+        } catch(Throwable t) {
+            db.endTransaction();
+            System.out.println("Error: " + t.getMessage());
+            return false;
+        }
+        return false;
+    }
+
+    public boolean isAdmin(String username) {
+        username = username.trim();
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+
+        String USER_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%s'",
+                TABLE_USERS,
+                TABLE_USERS, KEY_USER_NAME,
+                username);
+        Cursor cursor = db.rawQuery(USER_QUERY,null);
+        try {
+            if(cursor.moveToFirst()) {
+                if(Boolean.parseBoolean(cursor.getString(3))) {
+                    db.setTransactionSuccessful();
+                    db.endTransaction();
+                    return true;
+                }
+            } else {
+                db.setTransactionSuccessful();
+                db.endTransaction();
+                return false;
+            }
+        } catch(Throwable t) {
+            db.endTransaction();
+            System.out.println("Error: " + t.getMessage());
+        }
+        return false;
+    }
 }

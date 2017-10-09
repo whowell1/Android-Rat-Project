@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cs2340.ratapplication.models.DatabaseHelper;
 import cs2340.ratapplication.models.UserDatabase;
 import cs2340.ratapplication.R;
 
@@ -25,7 +26,8 @@ public class LoginPage extends AppCompatActivity {
     private Button Login;
     private Button Signup;
     private int counter = 3;
-    private UserDatabase userDB;
+    //private UserDatabase userDB;
+    DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
     @Override
 
 
@@ -37,11 +39,13 @@ public class LoginPage extends AppCompatActivity {
         Info = (TextView)findViewById(R.id.numAttempts);
         Login = (Button) findViewById(R.id.loginBtn);
 
+        /*
         if(getIntent().getSerializableExtra("userDB") != null) {
             userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
         } else {
             userDB = new UserDatabase();
         }
+        */
 
         Info.setText("");
 
@@ -59,7 +63,7 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginPage.this, SignupPage.class);
-                intent.putExtra("userDB", userDB);
+                //intent.putExtra("userDB", userDB);
                 startActivity(intent);
             }
         });
@@ -74,9 +78,9 @@ public class LoginPage extends AppCompatActivity {
 
     private void validate(String userName, String userPassword) {
 
-        if (userDB.checkPassword(userName, userPassword)){
+        if (dbHelper.checkPassword(userName, userPassword)){
             Intent intent = new Intent(LoginPage.this, HomePage.class);
-            intent.putExtra("userDB", userDB);
+            //intent.putExtra("userDB", userDB);
             intent.putExtra("userID", userName);
             startActivity(intent);
         } else {

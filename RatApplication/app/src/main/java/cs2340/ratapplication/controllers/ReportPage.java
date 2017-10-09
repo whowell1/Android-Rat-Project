@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import cs2340.ratapplication.R;
+import cs2340.ratapplication.models.DatabaseHelper;
 import cs2340.ratapplication.models.UserDatabase;
 
 public class ReportPage extends AppCompatActivity {
@@ -18,16 +19,18 @@ public class ReportPage extends AppCompatActivity {
     private EditText Borough;
     private Button Submit;
     private Button Cancel;
+    private DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
 
 
-    private UserDatabase userDB;
+
+    //private UserDatabase userDB;
     private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-        userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
+        //userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
         username = getIntent().getStringExtra("userID");
 
         LocationType = (EditText)findViewById(R.id.LocationType);
@@ -51,7 +54,7 @@ public class ReportPage extends AppCompatActivity {
 
             public void onClick(View view) {
                 Intent intent = new Intent(ReportPage.this, HomePage.class);
-                intent.putExtra("userDB", userDB);
+                //intent.putExtra("userDB", userDB);
                 intent.putExtra("userID", username);
                 startActivity(intent);
             }
