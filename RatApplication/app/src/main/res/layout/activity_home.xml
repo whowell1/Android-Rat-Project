@@ -11,24 +11,47 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Login Success"
-        tools:layout_editor_absoluteX="147dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/logoutBtn" />
+        android:layout_marginTop="25dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/reportBtn"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
 
     <Button
         android:id="@+id/logoutBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="logout"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="94dp" />
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp" />
 
     <Button
         android:id="@+id/reportBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Report"
-        tools:layout_editor_absoluteY="94dp"
         app:layout_constraintLeft_toRightOf="@+id/logoutBtn"
-        android:layout_marginLeft="25dp" />
+        android:layout_marginLeft="28dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="28dp" />
+
+    <TextView
+        android:id="@+id/reports"
+        android:layout_width="344dp"
+        android:layout_height="455dp"
+        android:text="Reports: \n"
+        android:layout_marginTop="13dp"
+        app:layout_constraintTop_toBottomOf="@+id/reportBtn"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

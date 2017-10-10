@@ -80,8 +80,7 @@ public class LoginPage extends AppCompatActivity {
 
         if (dbHelper.checkPassword(userName, userPassword)){
             Intent intent = new Intent(LoginPage.this, HomePage.class);
-            //intent.putExtra("userDB", userDB);
-            intent.putExtra("userID", userName);
+            intent.putExtra("userID", dbHelper.getUserID(userName));
             startActivity(intent);
         } else {
             Toast.makeText(this,"Improper Login", Toast.LENGTH_LONG).show();

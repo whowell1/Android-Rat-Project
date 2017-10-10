@@ -84,8 +84,7 @@ public class SignupPage extends AppCompatActivity {
                 Toast.makeText(this,"User already exists", Toast.LENGTH_LONG).show();
             }else {
                 Intent intent = new Intent(SignupPage.this, HomePage.class);
-                //intent.putExtra("userDB", userDB);
-                intent.putExtra("userID", userName);
+                intent.putExtra("userID", dbHelper.getUserID(userName));
                 startActivity(intent);
             }
         } else  if(!userName.contains("@")) {

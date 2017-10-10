@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import cs2340.ratapplication.R;
 import cs2340.ratapplication.models.DatabaseHelper;
@@ -21,17 +22,14 @@ public class ReportPage extends AppCompatActivity {
     private Button Cancel;
     private DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
 
-
-
-    //private UserDatabase userDB;
-    private String username;
+    private int userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         //userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
-        username = getIntent().getStringExtra("userID");
+        userID = getIntent().getIntExtra("userID", 0);
 
         LocationType = (EditText)findViewById(R.id.LocationType);
         Address = (EditText)findViewById(R.id.Address);
@@ -54,8 +52,7 @@ public class ReportPage extends AppCompatActivity {
 
             public void onClick(View view) {
                 Intent intent = new Intent(ReportPage.this, HomePage.class);
-                //intent.putExtra("userDB", userDB);
-                intent.putExtra("userID", username);
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             }
         });
@@ -71,7 +68,9 @@ public class ReportPage extends AppCompatActivity {
      */
     private void validate(String LocationType, String Address, String City,
                            String Borough,String ZipCode) {
-
+        if(dbHelper.addSighting(userID, LocationType, Address, City, Borough, Integer.parseInt(ZipCode.trim()))) {
+            Toast.makeText(this,"Successfully Added Sighting", Toast.LENGTH_LONG).show();
+        }
 
     }
 }

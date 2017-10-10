@@ -6,6 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.*;
 import android.content.Context;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 /**
  * Created by thoma on 10/9/2017.
  */
@@ -82,7 +87,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "(" +
                 KEY_SIGHTING_ID + " INTEGER PRIMARY KEY," + // Define a primary key
                 KEY_SIGHTINGS_USER_ID_FK + " INTEGER REFERENCES " + TABLE_USERS + "," + // Define a foreign key
-                KEY_SIGHTINGS_DATE + " DATETIME NOT NULL DEFAULT(GETDATE())," +
+                KEY_SIGHTINGS_DATE + " TEXT," +
                 KEY_SIGHTINGS_LOC + " TEXT," +
                 KEY_SIGHTINGS_ADDRESS + " TEXT," +
                 KEY_SIGHTINGS_CITY + " TEXT," +
@@ -135,6 +140,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(USER_QUERY,null);
         try {
             if(cursor.moveToFirst()) {
+                cursor.close();
                 db.endTransaction();
                 return false;
             } else {
@@ -144,6 +150,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 values.put(KEY_USER_ISADMIN, isAdmin);
 
                 db.insert(TABLE_USERS, null, values); //null to autoincrement primary key
+                cursor.close();
                 db.setTransactionSuccessful();
                 db.endTransaction();
                 return true;
@@ -170,50 +177,279 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             if(cursor.moveToFirst()) {
                 if(cursor.getString(2).equals(password)) {
+                    cursor.close();
                     db.setTransactionSuccessful();
                     db.endTransaction();
                     return true;
                 }
             } else {
+                cursor.close();
                 db.setTransactionSuccessful();
                 db.endTransaction();
                 return false;
             }
         } catch(Throwable t) {
             db.endTransaction();
+            cursor.close();
             System.out.println("Error: " + t.getMessage());
             return false;
         }
         return false;
     }
 
-    public boolean isAdmin(String username) {
-        username = username.trim();
+    public boolean isAdmin(int userID) {
 
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
 
         String USER_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%s'",
                 TABLE_USERS,
-                TABLE_USERS, KEY_USER_NAME,
-                username);
+                TABLE_USERS, KEY_USER_ID,
+                userID);
         Cursor cursor = db.rawQuery(USER_QUERY,null);
         try {
             if(cursor.moveToFirst()) {
                 if(Boolean.parseBoolean(cursor.getString(3))) {
+                    cursor.close();
                     db.setTransactionSuccessful();
                     db.endTransaction();
                     return true;
                 }
             } else {
+                cursor.close();
                 db.setTransactionSuccessful();
                 db.endTransaction();
                 return false;
             }
         } catch(Throwable t) {
+            cursor.close();
             db.endTransaction();
             System.out.println("Error: " + t.getMessage());
         }
         return false;
+    }
+
+    public int getUserID(String username) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+
+        String SIGHTINGS_QUERY = String.format("SELECT 1 FROM %s WHERE %s.%s = '%s'",
+                TABLE_USERS,
+                TABLE_USERS, KEY_USER_NAME,
+                username
+        );
+        Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
+        try {
+            if(cursor.moveToFirst()) {
+                db.endTransaction();
+                return (cursor.getInt(0));
+            }else {
+                throw new NoSuchElementException();
+            }
+
+        }catch (Throwable t) {
+            db.endTransaction();
+            System.out.println("Error: " + t.getMessage());
+            return 0;
+        }
+    }
+
+
+    public boolean addSighting(int userID, String locationType, String address, String city, String borough, int zip) {
+
+        return addSighting(userID, new Timestamp(System.currentTimeMillis()), locationType, address, city, borough, zip, 0, 0);
+    }
+
+    public boolean addSighting(int userID, Timestamp date, String locationType, String address, String city, String borough, int zip, float longitude, float latitude) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_SIGHTINGS_USER_ID_FK, userID);
+            values.put(KEY_SIGHTINGS_DATE, date.toString());
+            values.put(KEY_SIGHTINGS_LOC, locationType);
+            values.put(KEY_SIGHTINGS_ADDRESS, address);
+            values.put(KEY_SIGHTINGS_CITY, city);
+            values.put(KEY_SIGHTINGS_BOROUGH, borough);
+            values.put(KEY_SIGHTINGS_ZIP, zip);
+            values.put(KEY_SIGHTINGS_LONG, longitude);
+            values.put(KEY_SIGHTINGS_LAT, latitude);
+
+            db.insert(TABLE_SIGHTINGS, null, values); //null to autoincrement primary key
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            return true;
+
+        }catch (Throwable t) {
+            db.endTransaction();
+            System.out.println("Error: " + t.getMessage());
+        }
+        return false;
+
+    }
+    public boolean sightingsEmpty() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+
+        String SIGHTINGS_QUERY = String.format("SELECT COUNT(*) FROM %s", TABLE_SIGHTINGS);
+        Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
+
+        try {
+            if(cursor.moveToFirst()) {
+                System.out.println("NUM ROWS: " + cursor.getInt(0));
+                return cursor.getInt(0) == 0;
+            }else {
+                return false;
+            }
+        }catch (Throwable t) {
+            db.endTransaction();
+            System.out.println("Error: " + t.getMessage());
+        }
+        return false;
+    }
+
+    public Sighting getSighting(int sightingID) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+
+        String SIGHTINGS_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%d'",
+                TABLE_SIGHTINGS,
+                TABLE_SIGHTINGS, KEY_SIGHTING_ID,
+                sightingID);
+        Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
+        try {
+            if(cursor.moveToFirst()) {
+                Sighting sighting =  new Sighting();
+                sighting.userID = cursor.getInt(1);
+                sighting.locationType = cursor.getString(3);
+                sighting.address = cursor.getString(4);
+                sighting.city = cursor.getString(5);
+                sighting.borough = cursor.getString(6);
+                sighting.zip = cursor.getInt(7);
+                sighting.longitude = cursor.getFloat(8);
+                sighting.latitude = cursor.getFloat(9);
+                cursor.close();
+                db.setTransactionSuccessful();
+                db.endTransaction();
+                return sighting;
+            }else {
+                throw new NoSuchElementException();
+            }
+        }catch (Throwable t) {
+            System.out.println("Error: " + t.getMessage());
+            db.endTransaction();
+            return null;
+        }
+    }
+    public List<Sighting> getAllSightingsFromUser(String username) {
+        return getAllSightingsFromUser(getUserID(username));
+    }
+
+    public List<Sighting> getAllSightingsFromUser(int userID) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+
+        String SIGHTINGS_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%d'",
+                TABLE_SIGHTINGS,
+                TABLE_SIGHTINGS, KEY_SIGHTINGS_USER_ID_FK,
+                userID);
+        Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
+        try {
+            List<Sighting> list = new ArrayList<Sighting>();
+            while(cursor.moveToNext()) {
+
+                Sighting sighting =  new Sighting();
+                sighting.userID = cursor.getInt(1);
+                sighting.locationType = cursor.getString(3);
+                sighting.address = cursor.getString(4);
+                sighting.city = cursor.getString(5);
+                sighting.borough = cursor.getString(6);
+                sighting.zip = cursor.getInt(7);
+                sighting.longitude = cursor.getFloat(8);
+                sighting.latitude = cursor.getFloat(9);
+                list.add(sighting);
+
+            }
+            cursor.close();
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            return list;
+        }catch (Throwable t) {
+            System.out.println("Error: " + t.getMessage());
+            db.endTransaction();
+            return null;
+        }
+    }
+
+    public List<Sighting> getAllSightings() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+
+        String SIGHTINGS_QUERY = String.format("SELECT * FROM %s",
+                TABLE_SIGHTINGS
+                );
+        Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
+        try {
+            List<Sighting> list = new ArrayList<Sighting>();
+            while(cursor.moveToNext()) {
+
+                Sighting sighting =  new Sighting();
+                sighting.userID = cursor.getInt(1);
+                sighting.locationType = cursor.getString(3);
+                sighting.address = cursor.getString(4);
+                sighting.city = cursor.getString(5);
+                sighting.borough = cursor.getString(6);
+                sighting.zip = cursor.getInt(7);
+                sighting.longitude = cursor.getFloat(8);
+                sighting.latitude = cursor.getFloat(9);
+                list.add(sighting);
+
+            }
+            cursor.close();
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            return list;
+        }catch (Throwable t) {
+            System.out.println("Error: " + t.getMessage());
+            db.endTransaction();
+            return null;
+        }
+    }
+    public Sighting[] get50sightings() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+
+        String SIGHTINGS_QUERY = String.format("SELECT * FROM %s",
+                TABLE_SIGHTINGS
+        );
+        Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
+        try {
+            Sighting[] list = new Sighting[50];
+            int counter = 0;
+            while(cursor.moveToNext() && counter <50) {
+
+                Sighting sighting =  new Sighting();
+                sighting.userID = cursor.getInt(1);
+                sighting.locationType = cursor.getString(3);
+                sighting.address = cursor.getString(4);
+                sighting.city = cursor.getString(5);
+                sighting.borough = cursor.getString(6);
+                sighting.zip = cursor.getInt(7);
+                sighting.longitude = cursor.getFloat(8);
+                sighting.latitude = cursor.getFloat(9);
+                list[counter] = sighting;
+                counter++;
+
+            }
+            cursor.close();
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            return list;
+        }catch (Throwable t) {
+            cursor.close();
+            System.out.println("Error: " + t.getMessage());
+            db.endTransaction();
+            return null;
+        }
     }
 }
