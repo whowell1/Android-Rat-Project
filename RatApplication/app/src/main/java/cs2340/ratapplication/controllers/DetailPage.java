@@ -11,15 +11,24 @@ import cs2340.ratapplication.models.*;
 
 import org.w3c.dom.Text;
 
-
 import cs2340.ratapplication.R;
 import cs2340.ratapplication.models.DatabaseHelper;
 
 public class DetailPage extends AppCompatActivity {
     private DatabaseHelper helper = DatabaseHelper.getInstance(this);
-    private TextView textView;
+
+
+    //private UserDatabase userDB;
     private TextView Details;
     private DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+
+    //    private TextView locationType;
+//    private TextView address;
+//    private TextView city;
+//    private TextView borough;
+//    private TextView zipcode;
+//    private TextView lattitude;
+//    private TextView longitude;
     private Button Back;
 
 
@@ -30,27 +39,30 @@ public class DetailPage extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         Details = (TextView)findViewById(R.id.sightingIDView);
-
         Back = (Button)findViewById(R.id.backBtn);
 
         Sighting sight = dbHelper.getSighting(getIntent().getIntExtra("sightingID", 0));
-        Details.append("locationType" + sight.locationType);
-        Details.append("address" + sight.address);
-        Details.append("city" + sight.city);
-        Details.append("borough" + sight.borough);
-        Details.append("zipcode" + sight.zip);
-        Details.append("Latitude" + sight.latitude);
-        Details.append("Longitude" + sight.longitude);
+        Details.setText("\nLocationType: " + sight.locationType
+                + "\nAddress: " + sight.address
+                + "\nCity: " + sight.city
+                + "\nBorough: " + sight.borough
+                + "\nZipcode: " + sight.zip
+                + "\nLatitude: " + sight.latitude
+                + "\nLongitude: " + sight.longitude);
+        System.out.println(sight);
 
         Back.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                Intent intent = new Intent(DetailPage.this, ReportPage.class);
+                Intent intent = new Intent(DetailPage.this, HomePage.class);
                 startActivity(intent);
             }
         });
 
+
+
+
+
+
     }
-
-
 }
