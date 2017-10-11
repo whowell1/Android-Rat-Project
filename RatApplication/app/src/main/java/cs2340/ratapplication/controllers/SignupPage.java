@@ -80,7 +80,7 @@ public class SignupPage extends AppCompatActivity {
     private void validate(String userName, String userPassword) {
         if ((userName.contains("@") && userPassword.length() >= 7)){
 
-            if(!dbHelper.addUser(userName, userPassword, AdminSpinner.getSelectedItem().equals("Admin"))) {
+            if(dbHelper.addUser(userName, userPassword, AdminSpinner.getSelectedItem().equals("Admin")) == -1) {
                 Toast.makeText(this,"User already exists", Toast.LENGTH_LONG).show();
             }else {
                 Intent intent = new Intent(SignupPage.this, HomePage.class);

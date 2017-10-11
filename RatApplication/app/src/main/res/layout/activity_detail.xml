@@ -89,5 +89,5 @@
         android:layout_height="wrap_content"
         android:text="LocationType"
         tools:layout_editor_absoluteX="251dp"
-        tools:layout_editor_absoluteY="88dp" />
+
 </android.support.constraint.ConstraintLayout>

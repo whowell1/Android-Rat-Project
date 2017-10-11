@@ -68,7 +68,7 @@ public class ReportPage extends AppCompatActivity {
      */
     private void validate(String LocationType, String Address, String City,
                            String Borough,String ZipCode) {
-        if(dbHelper.addSighting(userID, LocationType, Address, City, Borough, Integer.parseInt(ZipCode.trim()))) {
+        if(dbHelper.addSighting(userID, LocationType, Address, City, Borough, Integer.parseInt(ZipCode.trim())) != -1) {
             Toast.makeText(this,"Successfully Added Sighting", Toast.LENGTH_LONG).show();
         }
 
