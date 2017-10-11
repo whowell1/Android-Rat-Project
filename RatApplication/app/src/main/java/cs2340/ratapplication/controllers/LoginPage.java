@@ -38,14 +38,7 @@ public class LoginPage extends AppCompatActivity {
         Password= (EditText)findViewById(R.id.etPassword);
         Info = (TextView)findViewById(R.id.numAttempts);
         Login = (Button) findViewById(R.id.loginBtn);
-
-        /*
-        if(getIntent().getSerializableExtra("userDB") != null) {
-            userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
-        } else {
-            userDB = new UserDatabase();
-        }
-        */
+        
 
         Info.setText("");
 
