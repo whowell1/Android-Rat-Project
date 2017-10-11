@@ -5,11 +5,20 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.net.URISyntaxException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -35,8 +44,8 @@ public class HomePage extends AppCompatActivity {
     private Button Report;
     //private UserDatabase userDB;
     private TextView textView;
-    private TextView reports;
     private int userID;
+    private ListView listView;
     private DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
 
 
@@ -48,10 +57,9 @@ public class HomePage extends AppCompatActivity {
         userID = getIntent().getIntExtra("userID", 0);
         //userID = getIntent().getIntExtra("userID");
         textView = (TextView) findViewById(R.id.isAdmin);
-        reports = (TextView) findViewById(R.id.reports);
         Logout = (Button) findViewById(R.id.logoutBtn);
         Report = (Button) findViewById(R.id.reportBtn);
-
+        listView = (ListView) findViewById(R.id.reportList);
 
 
 
@@ -84,51 +92,53 @@ public class HomePage extends AppCompatActivity {
     protected void loadData() throws FileNotFoundException, URISyntaxException {
         Scanner dataFile = new Scanner(getResources().openRawResource(
                 getResources().getIdentifier("ratdata", "raw", getPackageName()))
-                );
+        );
         dataFile.useDelimiter(",");
         int counter = 0;
         String[] data = new String[7];
-
         //removes labels
-        while(dataFile.hasNext() && counter < 51) {
+        while (dataFile.hasNext() && counter < 51) {
             String fix = dataFile.next();
             counter++;
         }
 
         counter = 0;
         int entryCounter = 0;
-        while(dataFile.hasNext() && entryCounter < 1000) {
+        while (dataFile.hasNext() && entryCounter < 1000) {
             counter = 0;
             data = new String[7];
             while (counter < 52 && dataFile.hasNext()) {
                 String val = dataFile.next();
-                switch(counter) {
-                    case 7 : data[0] = val;
+                switch (counter) {
+                    case 7:
+                        data[0] = val;
                         break;
-                    case 8 : data[4] = val;
+                    case 8:
+                        data[4] = val;
                         break;
-                    case 9 : data[1] = val;
+                    case 9:
+                        data[1] = val;
                         break;
-                    case 16 : data[2] = val;
+                    case 16:
+                        data[2] = val;
                         break;
-                    case 23 : data[3] = val;
+                    case 23:
+                        data[3] = val;
                         break;
-                    case 49 : data[5] = val;
+                    case 49:
+                        data[5] = val;
                         break;
-                    case 50: data[6] = val;
+                    case 50:
+                        data[6] = val;
                         break;
-                    default : break;
+                    default:
+                        break;
 
                 }
                 counter++;
             }
-            System.out.println("Data[]: ");
-            for(int i = 0; i < data.length; i++) {
-                System.out.println("data[" + i + "] : " + data[i]);
-            }
 
-            dbHelper.addSighting(userID, new Timestamp(System.currentTimeMillis()), data[0],data[1],data[2],data[3],Integer.parseInt(data[4]),Float.parseFloat(data[5]),Float.parseFloat(data[6]));
-            reports.append(data[4] + "\n");
+            dbHelper.addSighting(userID, new Timestamp(System.currentTimeMillis()), data[0], data[1], data[2], data[3], Integer.parseInt(data[4]), Float.parseFloat(data[5]), Float.parseFloat(data[6]));
             entryCounter++;
         }
 
@@ -140,13 +150,23 @@ public class HomePage extends AppCompatActivity {
             }catch(Throwable t){
                 System.out.println("Error: " + t.getMessage());
             }
-        }else {
-            Sighting[] sightings = dbHelper.get50sightings();
-            System.out.println("zip: " + sightings[0].zip);
-            for(int i = 0; i < sightings.length;i++) {
-                reports.append(sightings[i].zip + "\n");
-            }
         }
+            Sighting[] sightings = dbHelper.get50sightings();
+            List<Long> sightingsNum = new ArrayList<Long>();
+            for(int i = 0; i< sightings.length; i++) {
+                sightingsNum.add(sightings[i].sightingID);
+            }
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                    Intent intent = new Intent(HomePage.this, DetailPage.class);
+                    intent.putExtra("sightingID", arg2 + 1);
+                    startActivity(intent);
+                }
+            });
+            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, sightingsNum);
+            listView.setAdapter(adapter);
     }
 
 }
