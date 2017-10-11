@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import cs2340.ratapplication.models.DatabaseHelper;
-import cs2340.ratapplication.models.UserDatabase;
 import cs2340.ratapplication.R;
 
 public class LoginPage extends AppCompatActivity {
@@ -26,26 +25,25 @@ public class LoginPage extends AppCompatActivity {
     private Button Login;
     private Button Signup;
     private int counter = 3;
-    //private UserDatabase userDB;
     DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+
     @Override
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Name = (EditText)findViewById(R.id.etName);
-        Password= (EditText)findViewById(R.id.etPassword);
-        Info = (TextView)findViewById(R.id.numAttempts);
+        Name = (EditText) findViewById(R.id.etName);
+        Password = (EditText) findViewById(R.id.etPassword);
+        Info = (TextView) findViewById(R.id.numAttempts);
         Login = (Button) findViewById(R.id.loginBtn);
-        
 
         Info.setText("");
 
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validate(Name.getText().toString(),Password.getText().toString());
+                validate(Name.getText().toString(), Password.getText().toString());
             }
         });
 
@@ -56,7 +54,6 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginPage.this, SignupPage.class);
-                //intent.putExtra("userDB", userDB);
                 startActivity(intent);
             }
         });
@@ -71,13 +68,13 @@ public class LoginPage extends AppCompatActivity {
 
     private void validate(String userName, String userPassword) {
 
-        if (dbHelper.checkPassword(userName, userPassword)){
+        if (dbHelper.checkPassword(userName, userPassword)) {
             Intent intent = new Intent(LoginPage.this, HomePage.class);
             intent.putExtra("userID", dbHelper.getUserID(userName));
             startActivity(intent);
         } else {
-            Toast.makeText(this,"Improper Login", Toast.LENGTH_LONG).show();
-            counter --;
+            Toast.makeText(this, "Improper Login", Toast.LENGTH_LONG).show();
+            counter--;
             Info.setText("No attempts left: " + String.valueOf(counter));
             if (counter == 0) {
                 Login.setEnabled(false);

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 import cs2340.ratapplication.models.*;
 
 import org.w3c.dom.Text;
@@ -18,19 +19,9 @@ public class DetailPage extends AppCompatActivity {
     private DatabaseHelper helper = DatabaseHelper.getInstance(this);
 
 
-    //private UserDatabase userDB;
     private TextView Details;
     private DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
-
-    //    private TextView locationType;
-//    private TextView address;
-//    private TextView city;
-//    private TextView borough;
-//    private TextView zipcode;
-//    private TextView lattitude;
-//    private TextView longitude;
     private Button Back;
-
 
 
     @Override
@@ -38,8 +29,8 @@ public class DetailPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        Details = (TextView)findViewById(R.id.sightingIDView);
-        Back = (Button)findViewById(R.id.backBtn);
+        Details = (TextView) findViewById(R.id.sightingIDView);
+        Back = (Button) findViewById(R.id.backBtn);
 
         Sighting sight = dbHelper.getSighting(getIntent().getIntExtra("sightingID", 0));
         Details.setText("\nLocationType: " + sight.locationType
@@ -58,10 +49,6 @@ public class DetailPage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-
-
 
 
     }

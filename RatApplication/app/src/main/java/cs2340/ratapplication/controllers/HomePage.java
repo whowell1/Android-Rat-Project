@@ -1,6 +1,5 @@
 package cs2340.ratapplication.controllers;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,28 +7,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
 import java.net.URISyntaxException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
-import java.io.File;
 import java.io.FileNotFoundException;
 
-//import cs2340.ratapplication.models.UserDatabase;
 import cs2340.ratapplication.models.DatabaseHelper;
 import cs2340.ratapplication.R;
 import cs2340.ratapplication.models.Sighting;
 
-import java.net.URL;
-import java.net.URLClassLoader;
 
 //
 
@@ -42,7 +32,6 @@ This is the class that handles all of the login
 public class HomePage extends AppCompatActivity {
     private Button Logout;
     private Button Report;
-    //private UserDatabase userDB;
     private TextView textView;
     private int userID;
     private ListView listView;
@@ -53,9 +42,7 @@ public class HomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        //userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
         userID = getIntent().getIntExtra("userID", 0);
-        //userID = getIntent().getIntExtra("userID");
         textView = (TextView) findViewById(R.id.isAdmin);
         Logout = (Button) findViewById(R.id.logoutBtn);
         Report = (Button) findViewById(R.id.reportBtn);

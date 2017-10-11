@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import cs2340.ratapplication.R;
 import cs2340.ratapplication.models.DatabaseHelper;
-import cs2340.ratapplication.models.UserDatabase;
 
 public class ReportPage extends AppCompatActivity {
     private EditText LocationType;
@@ -28,7 +27,6 @@ public class ReportPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-        //userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
         userID = getIntent().getIntExtra("userID", 0);
 
         LocationType = (EditText)findViewById(R.id.LocationType);

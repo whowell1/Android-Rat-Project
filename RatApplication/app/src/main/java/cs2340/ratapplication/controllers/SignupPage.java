@@ -13,7 +13,6 @@ import android.widget.Toast;
 import android.widget.ArrayAdapter;
 
 import cs2340.ratapplication.R;
-import cs2340.ratapplication.models.UserDatabase;
 import cs2340.ratapplication.models.DatabaseHelper;
 
 /**
@@ -31,7 +30,6 @@ public class SignupPage extends AppCompatActivity {
     private Button Signup;
     private Button Back;
     private Spinner AdminSpinner;
-    //private UserDatabase userDB;
     private DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
     @Override
 
@@ -55,7 +53,6 @@ public class SignupPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SignupPage.this, LoginPage.class);
-                //intent.putExtra("userDB", userDB);
                 startActivity(intent);
             }
         });
@@ -67,7 +64,6 @@ public class SignupPage extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         AdminSpinner.setAdapter(adapter);
 
-        //userDB = (UserDatabase) getIntent().getSerializableExtra("userDB");
     }
 
 
