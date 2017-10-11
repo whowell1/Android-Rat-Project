@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 
 public class Sighting {
     //public User user;
+    public long sightingID;
     public int userID;
     public Timestamp date;
     public String locationType;

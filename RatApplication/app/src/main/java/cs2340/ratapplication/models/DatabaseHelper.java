@@ -122,11 +122,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean addUser(String username, String password) {
+    public long addUser(String username, String password) {
         return addUser(username, password, false);
 
     }
-    public boolean addUser(String username, String password, boolean isAdmin) {
+    public long addUser(String username, String password, boolean isAdmin) {
         username = username.trim();
         password = password.trim();
 
@@ -142,23 +142,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(cursor.moveToFirst()) {
                 cursor.close();
                 db.endTransaction();
-                return false;
+                return -1;
             } else {
                 ContentValues values = new ContentValues();
                 values.put(KEY_USER_NAME, username);
                 values.put(KEY_USER_PASSWORD, password);
                 values.put(KEY_USER_ISADMIN, isAdmin);
 
-                db.insert(TABLE_USERS, null, values); //null to autoincrement primary key
+                long userID = db.insert(TABLE_USERS, null, values); //null to autoincrement primary key
                 cursor.close();
                 db.setTransactionSuccessful();
                 db.endTransaction();
-                return true;
+                return userID;
             }
         } catch(Throwable t) {
             db.endTransaction();
             System.out.println("Error: "+ t.getMessage());
-            return false;
+            return -1;
         }
     }
 
@@ -255,12 +255,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean addSighting(int userID, String locationType, String address, String city, String borough, int zip) {
+    public long addSighting(int userID, String locationType, String address, String city, String borough, int zip) {
 
         return addSighting(userID, new Timestamp(System.currentTimeMillis()), locationType, address, city, borough, zip, 0, 0);
     }
 
-    public boolean addSighting(int userID, Timestamp date, String locationType, String address, String city, String borough, int zip, float longitude, float latitude) {
+    public long addSighting(int userID, Timestamp date, String locationType, String address, String city, String borough, int zip, float longitude, float latitude) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
@@ -275,16 +275,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_SIGHTINGS_LONG, longitude);
             values.put(KEY_SIGHTINGS_LAT, latitude);
 
-            db.insert(TABLE_SIGHTINGS, null, values); //null to autoincrement primary key
+            long sightingID = db.insert(TABLE_SIGHTINGS, null, values); //null to autoincrement primary key
             db.setTransactionSuccessful();
             db.endTransaction();
-            return true;
+            return sightingID;
 
         }catch (Throwable t) {
             db.endTransaction();
             System.out.println("Error: " + t.getMessage());
         }
-        return false;
+        return -1;
 
     }
     public boolean sightingsEmpty() {
@@ -429,6 +429,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             while(cursor.moveToNext() && counter <50) {
 
                 Sighting sighting =  new Sighting();
+                sighting.sightingID = cursor.getLong(0);
                 sighting.userID = cursor.getInt(1);
                 sighting.locationType = cursor.getString(3);
                 sighting.address = cursor.getString(4);
