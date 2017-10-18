@@ -28,6 +28,7 @@ public class ReportPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         userID = getIntent().getIntExtra("userID", 0);
+        System.out.println("UserID: " + userID);
 
         LocationType = (EditText)findViewById(R.id.LocationType);
         Address = (EditText)findViewById(R.id.Address);

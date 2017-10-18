@@ -91,43 +91,68 @@ public class HomePage extends AppCompatActivity {
 
         counter = 0;
         int entryCounter = 0;
-        while (dataFile.hasNext() && entryCounter < 1000) {
+        boolean offset = false;
+        while (dataFile.hasNext() && entryCounter < 10000) {
             counter = 0;
             data = new String[7];
             while (counter < 52 && dataFile.hasNext()) {
-                String val = dataFile.next();
-                switch (counter) {
-                    case 7:
-                        data[0] = val;
-                        break;
-                    case 8:
-                        data[4] = val;
-                        break;
-                    case 9:
-                        data[1] = val;
-                        break;
-                    case 16:
-                        data[2] = val;
-                        break;
-                    case 23:
-                        data[3] = val;
-                        break;
-                    case 49:
-                        data[5] = val;
-                        break;
-                    case 50:
-                        data[6] = val;
-                        break;
-                    default:
-                        break;
+                if(!(offset && counter == 0)) {
+                    String val = dataFile.next();
+                    switch (counter) {
+                        case 7:
+                            data[0] = val;
+                            break;
+                        case 8:
+                            data[4] = val;
+                            break;
+                        case 9:
+                            data[1] = val;
+                            break;
+                        case 16:
+                            data[2] = val;
+                            break;
+                        case 23:
+                            data[3] = val;
+                            break;
+                        case 49:
+                            data[5] = val;
 
+                            break;
+                        case 50:
+                            data[6] = val;
+                            break;
+                        default:
+                            break;
+
+                    }
+                } else {
+                    offset = false;
                 }
                 counter++;
             }
-
-            dbHelper.addSighting(userID, new Timestamp(System.currentTimeMillis()), data[0], data[1], data[2], data[3], Integer.parseInt(data[4]), Float.parseFloat(data[5]), Float.parseFloat(data[6]));
+            try {
+                //Exception handling for empty strings for zip, longitude and latitude
+                if(data[5].trim().equals("") && data[6].trim().equals("")) {
+                    //System.out.println("OFFSET FIX-----------");
+                    offset = true;
+                }
+                if (data[4].equals("")) {
+                    data[4] = "0";
+                }
+                if(data[5].equals("")) {
+                    data[5] = "0";
+                }
+                if(data[6].equals("")) {
+                    data[6] = "0";
+                }
+                dbHelper.addSighting(userID, new Timestamp(System.currentTimeMillis()), data[0], data[1], data[2], data[3], Integer.parseInt(data[4]), Float.parseFloat(data[5]), Float.parseFloat(data[6]));
+            }catch (Throwable t) {
+                System.out.println("Error: " + t.getMessage());
+            }
             entryCounter++;
+
         }
+
 
     }
     protected void displayData() {
@@ -139,9 +164,9 @@ public class HomePage extends AppCompatActivity {
             }
         }
             Sighting[] sightings = dbHelper.get50sightings();
-            List<Long> sightingsNum = new ArrayList<Long>();
+            List<Integer> sightingsNum = new ArrayList<Integer>();
             for(int i = 0; i< sightings.length; i++) {
-                sightingsNum.add(sightings[i].sightingID);
+                sightingsNum.add(sightings[i].zip);
             }
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

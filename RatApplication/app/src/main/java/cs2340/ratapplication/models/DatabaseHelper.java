@@ -49,7 +49,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // don't accidentally leak an Activity's context.
         // See this article for more information: http://bit.ly/6LRzfx
         if (sInstance == null) {
-            System.out.println("DATABASE CREATED-----------------------------------");
             sInstance = new DatabaseHelper(context);
         }
         return sInstance;
@@ -233,7 +232,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
 
-        String SIGHTINGS_QUERY = String.format("SELECT 1 FROM %s WHERE %s.%s = '%s'",
+        String SIGHTINGS_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%s'",
                 TABLE_USERS,
                 TABLE_USERS, KEY_USER_NAME,
                 username
@@ -242,6 +241,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             if(cursor.moveToFirst()) {
                 db.endTransaction();
+                System.out.println("UserId: " + cursor.getInt(0));
                 return (cursor.getInt(0));
             }else {
                 throw new NoSuchElementException();
@@ -419,7 +419,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
 
-        String SIGHTINGS_QUERY = String.format("SELECT * FROM %s",
+        String SIGHTINGS_QUERY = String.format("SELECT 50 FROM %s",
                 TABLE_SIGHTINGS
         );
         Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
