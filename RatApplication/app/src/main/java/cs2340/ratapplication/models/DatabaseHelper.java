@@ -384,7 +384,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<Sighting> getAllSightings() {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
-
         String SIGHTINGS_QUERY = String.format("SELECT * FROM %s",
                 TABLE_SIGHTINGS
                 );
@@ -418,9 +417,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Sighting[] get50sightings() {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
-
-        String SIGHTINGS_QUERY = String.format("SELECT 50 FROM %s",
-                TABLE_SIGHTINGS
+        String SIGHTINGS_QUERY = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT 50",
+                TABLE_SIGHTINGS,
+                KEY_SIGHTINGS_DATE
         );
         Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
         try {

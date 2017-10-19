@@ -71,7 +71,6 @@ public class HomePage extends AppCompatActivity {
         if(dbHelper.isAdmin(userID)) {
             textView.setText("Admin Account");
         }
-
         displayData();
 
     }
@@ -164,21 +163,23 @@ public class HomePage extends AppCompatActivity {
             }
         }
             Sighting[] sightings = dbHelper.get50sightings();
-            List<Integer> sightingsNum = new ArrayList<Integer>();
+            List<String> sightingsNum = new ArrayList<String>();
             for(int i = 0; i< sightings.length; i++) {
-                sightingsNum.add(sightings[i].zip);
+                sightingsNum.add("Sighting #" + sightings[i].sightingID);
             }
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                     Intent intent = new Intent(HomePage.this, DetailPage.class);
-                    intent.putExtra("sightingID", arg2 + 1);
+                    intent.putExtra("sightingID", Integer.parseInt(((TextView) arg1).getText().toString().substring(10)));
                     startActivity(intent);
                 }
             });
             ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, sightingsNum);
             listView.setAdapter(adapter);
+
+            Sighting sight = dbHelper.getSighting(1000);
     }
 
 }
