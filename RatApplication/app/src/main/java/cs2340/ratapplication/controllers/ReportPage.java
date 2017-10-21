@@ -67,7 +67,20 @@ public class ReportPage extends AppCompatActivity {
      */
     private void validate(String LocationType, String Address, String City,
                            String Borough,String ZipCode) {
-        if(dbHelper.addSighting(userID, LocationType, Address, City, Borough, Integer.parseInt(ZipCode.trim())) != -1) {
+
+        String validZip = "/d" ;
+
+        if (LocationType.isEmpty() || Address.isEmpty() || City.isEmpty() || Borough.isEmpty() || ZipCode.isEmpty()){
+            Toast.makeText(this, "Please enter a proper entry", Toast.LENGTH_LONG).show();
+        }
+
+
+        if (!(ZipCode.contains(validZip))){
+            Toast.makeText(this, "Please enter a proper Zip Code", Toast.LENGTH_LONG).show();
+
+        }
+
+         else if (dbHelper.addSighting(userID, LocationType, Address, City, Borough, Integer.parseInt(ZipCode.trim())) != -1) {
             Toast.makeText(this,"Successfully Added Sighting", Toast.LENGTH_LONG).show();
         }
 
