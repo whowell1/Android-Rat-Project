@@ -30,23 +30,23 @@ public class ReportPage extends AppCompatActivity {
         userID = getIntent().getIntExtra("userID", 0);
         System.out.println("UserID: " + userID);
 
-        LocationType = (EditText)findViewById(R.id.LocationType);
-        Address = (EditText)findViewById(R.id.Address);
-        City = (EditText)findViewById(R.id.City);
-        Borough = (EditText)findViewById(R.id.Borough);
-        ZipCode = (EditText)findViewById(R.id.ZipCode);
-        Submit = (Button)findViewById(R.id.SubmitBtn);
-        Cancel = (Button)findViewById(R.id.CancelBtn);
+        LocationType = (EditText) findViewById(R.id.LocationType);
+        Address = (EditText) findViewById(R.id.Address);
+        City = (EditText) findViewById(R.id.City);
+        Borough = (EditText) findViewById(R.id.Borough);
+        ZipCode = (EditText) findViewById(R.id.ZipCode);
+        Submit = (Button) findViewById(R.id.SubmitBtn);
+        Cancel = (Button) findViewById(R.id.CancelBtn);
 
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validate(LocationType.getText().toString(),Address.getText().toString(),
+                validate(LocationType.getText().toString(), Address.getText().toString(),
                         City.getText().toString(), Borough.getText().toString(),
                         ZipCode.getText().toString());
             }
         });
-        Cancel.setOnClickListener(new View.OnClickListener(){
+        Cancel.setOnClickListener(new View.OnClickListener() {
             @Override
 
             public void onClick(View view) {
@@ -66,22 +66,20 @@ public class ReportPage extends AppCompatActivity {
 
      */
     private void validate(String LocationType, String Address, String City,
-                           String Borough,String ZipCode) {
+                          String Borough, String ZipCode) {
 
-        String validZip = "/d" ;
+        String validZip = "/d";
 
-        if (LocationType.isEmpty() || Address.isEmpty() || City.isEmpty() || Borough.isEmpty() || ZipCode.isEmpty()){
+        if (LocationType.isEmpty() || Address.isEmpty() || City.isEmpty() || Borough.isEmpty() || ZipCode.isEmpty()) {
             Toast.makeText(this, "Please enter a proper entry", Toast.LENGTH_LONG).show();
         }
 
 
-        if (!(ZipCode.contains(validZip))){
+        if (!(ZipCode.contains(validZip))) {
             Toast.makeText(this, "Please enter a proper Zip Code", Toast.LENGTH_LONG).show();
 
-        }
-
-         else if (dbHelper.addSighting(userID, LocationType, Address, City, Borough, Integer.parseInt(ZipCode.trim())) != -1) {
-            Toast.makeText(this,"Successfully Added Sighting", Toast.LENGTH_LONG).show();
+        } else if (dbHelper.addSighting(userID, LocationType, Address, City, Borough, Integer.parseInt(ZipCode.trim())) != -1) {
+            Toast.makeText(this, "Successfully Added Sighting", Toast.LENGTH_LONG).show();
         }
 
     }
