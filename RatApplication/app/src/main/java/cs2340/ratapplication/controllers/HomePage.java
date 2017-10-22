@@ -32,6 +32,7 @@ This is the class that handles all of the login
 public class HomePage extends AppCompatActivity {
     private Button Logout;
     private Button Report;
+    private Button seeSightingBtn;
     private TextView textView;
     private int userID;
     private ListView listView;
@@ -43,12 +44,22 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         userID = getIntent().getIntExtra("userID", 0);
+        seeSightingBtn = (Button) findViewById(R.id.seeSightingBtn);
         textView = (TextView) findViewById(R.id.isAdmin);
         Logout = (Button) findViewById(R.id.logoutBtn);
         Report = (Button) findViewById(R.id.reportBtn);
         listView = (ListView) findViewById(R.id.reportList);
 
 
+
+
+        seeSightingBtn.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                Intent intent = new Intent(HomePage.this, LoginPage.class);
+                startActivity(intent);
+            }
+        });
 
         Logout.setOnClickListener(new View.OnClickListener() {
 
