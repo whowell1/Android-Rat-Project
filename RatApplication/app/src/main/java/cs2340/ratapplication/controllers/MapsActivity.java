@@ -3,6 +3,7 @@ package cs2340.ratapplication.controllers;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import cs2340.ratapplication.R;
+import cs2340.ratapplication.models.DatabaseHelper;
 
 import android.widget.Button;
 
@@ -17,8 +18,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private Button back;
+    private DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
 
     // method that takes in date object in dbhelper
+
 
 
     @Override
@@ -44,10 +47,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
     }
 }

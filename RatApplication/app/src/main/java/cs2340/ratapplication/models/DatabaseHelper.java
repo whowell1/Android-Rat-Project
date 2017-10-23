@@ -260,6 +260,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return addSighting(userID, new Timestamp(System.currentTimeMillis()), locationType, address, city, borough, zip, 0, 0);
     }
 
+
+
+
     public long addSighting(int userID, Timestamp date, String locationType, String address, String city, String borough, int zip, float longitude, float latitude) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -452,4 +455,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return null;
         }
     }
+
+//    public Sighting[] get10sightings() {
+//        SQLiteDatabase db = getWritableDatabase();
+//        db.beginTransaction();
+//        String SIGHTINGS_QUERY = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT 10",
+//                TABLE_SIGHTINGS,
+//                KEY_SIGHTINGS_DATE
+//        );
+//        Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
+//        try {
+//            Sighting[] list = new Sighting[50];
+//            int counter = 0;
+//            while(cursor.moveToNext() && counter <50) {
+//
+//                Sighting sighting =  new Sighting();
+//                sighting.sightingID = cursor.getLong(0);
+//                sighting.userID = cursor.getInt(1);
+//                sighting.locationType = cursor.getString(3);
+//                sighting.address = cursor.getString(4);
+//                sighting.city = cursor.getString(5);
+//                sighting.borough = cursor.getString(6);
+//                sighting.zip = cursor.getInt(7);
+//                sighting.longitude = cursor.getFloat(8);
+//                sighting.latitude = cursor.getFloat(9);
+//                list[counter] = sighting;
+//                counter++;
+//
+//            }
+//            cursor.close();
+//            db.setTransactionSuccessful();
+//            db.endTransaction();
+//            return list;
+//        }catch (Throwable t) {
+//            cursor.close();
+//            System.out.println("Error: " + t.getMessage());
+//            db.endTransaction();
+//            return null;
+//        }
+//    }
+
+
+
 }
