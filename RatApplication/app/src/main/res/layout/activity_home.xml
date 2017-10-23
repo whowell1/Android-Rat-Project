@@ -60,7 +60,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="See Sighting"
-        tools:layout_editor_absoluteX="254dp"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintLeft_toRightOf="@+id/reportBtn"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/reportList"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

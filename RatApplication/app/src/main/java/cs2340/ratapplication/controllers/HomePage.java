@@ -56,7 +56,8 @@ public class HomePage extends AppCompatActivity {
         seeSightingBtn.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                Intent intent = new Intent(HomePage.this, LoginPage.class);
+                Intent intent = new Intent(HomePage.this, MapsActivity.class);
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             }
         });
