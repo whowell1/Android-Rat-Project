@@ -13,10 +13,18 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-
+//
+//allprojects {
+//    repositories {
+//        jcenter()
+//    }
+//}
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
     }
 }
 
