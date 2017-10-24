@@ -60,7 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Sighting listOfMarkers[] = dbHelper.get10sightings();
             for (int i = 0; i <= listOfMarkers.length; i++) {
                 LatLng individualMarkers = new LatLng(listOfMarkers[i].latitude, listOfMarkers[i].longitude);
-                mMap.addMarker(new MarkerOptions().position(individualMarkers).title(String.valueOf(listOfMarkers[i].sightingID)));
+                mMap.addMarker(new MarkerOptions().position(individualMarkers).title(String.valueOf("sighting id: " + listOfMarkers[i].sightingID)));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(individualMarkers));
             }
 
