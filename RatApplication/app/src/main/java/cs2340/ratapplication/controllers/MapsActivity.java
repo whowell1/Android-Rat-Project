@@ -21,7 +21,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
 
-    // method that takes in date object in dbhelper
+
 
 
     @Override
