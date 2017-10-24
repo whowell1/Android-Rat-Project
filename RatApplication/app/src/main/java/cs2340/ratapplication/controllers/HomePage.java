@@ -83,7 +83,7 @@ public class HomePage extends AppCompatActivity {
         if(dbHelper.isAdmin(userID)) {
             textView.setText("Admin Account");
         }
-        displayData();
+//        displayData();
 
     }
 

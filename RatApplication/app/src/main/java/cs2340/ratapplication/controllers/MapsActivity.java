@@ -2,6 +2,7 @@ package cs2340.ratapplication.controllers;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+
 import cs2340.ratapplication.R;
 import cs2340.ratapplication.models.DatabaseHelper;
 import cs2340.ratapplication.models.Sighting;
@@ -18,11 +19,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private Button back;
     private DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
 
     // method that takes in date object in dbhelper
-
 
 
     @Override
@@ -46,26 +45,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * installed Google Play services and returned to the app.
      */
     @Override
+
+
+
+    // changed SIGHTINGID FROM LONG TO STRIN
+
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+//        Sighting listOfMarkers[] = dbHelper.get10sightings();
 
 
-//       LatLng markers = new LatLng(dbHelper.getLat());
-
-        //instead of marker in Sydney replace with db.helper.get(info);
-//        mMap.addMarker(new MarkerOptions().position(markers).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(markers));
-
-//        dbHelper.get50sightings()
-
-            // a function in Databasehelper that returns a Latitute and longitude
-
+        try {
+    //
+            Sighting listOfMarkers[] = dbHelper.get10sightings();
+            for (int i = 0; i <= listOfMarkers.length; i++) {
+                LatLng individualMarkers = new LatLng(listOfMarkers[i].latitude, listOfMarkers[i].longitude);
+                mMap.addMarker(new MarkerOptions().position(individualMarkers).title(String.valueOf(listOfMarkers[i].sightingID)));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(individualMarkers));
+            }
 
 
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-55, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        }
 
+        catch (Exception e) {
+            System.out.println(e);
+        }
     }
+
+
+
+
+
+
 }
+
+
+
