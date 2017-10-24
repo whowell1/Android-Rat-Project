@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import cs2340.ratapplication.R;
 import cs2340.ratapplication.models.DatabaseHelper;
+import cs2340.ratapplication.models.Sighting;
 
 import android.widget.Button;
 
@@ -47,10 +48,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+
+//       LatLng markers = new LatLng(dbHelper.getLat());
+
+        //instead of marker in Sydney replace with db.helper.get(info);
+//        mMap.addMarker(new MarkerOptions().position(markers).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(markers));
+
+//        dbHelper.get50sightings()
+
+            // a function in Databasehelper that returns a Latitute and longitude
+
+
+
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        LatLng sydney = new LatLng(-55, 151);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
     }
 }

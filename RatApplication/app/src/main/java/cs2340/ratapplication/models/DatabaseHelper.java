@@ -263,6 +263,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
+
+
     public long addSighting(int userID, Timestamp date, String locationType, String address, String city, String borough, int zip, float longitude, float latitude) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -417,6 +419,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return null;
         }
     }
+
+    // --------------------------------------------------------------------------------//
+    // discuss with Thomas tomorrow about how to amke this db helper class
+ // count method
+    public Sighting[] getLat() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        String LONGITUDE_QUERY = String.format("SELECT * FROM %s ORDER BY %s " ,
+                TABLE_SIGHTINGS
+                // whatever Thomas passing in
+
+                ) ;
+       Cursor cursor = db.rawQuery(LONGITUDE_QUERY, null);
+        try {
+            Sighting[] list = new Sighting[50];
+            int counter = 0;
+            while(cursor.moveToNext() && counter < list.length) {
+
+                Sighting sighting =  new Sighting();
+                sighting.longitude = cursor.getFloat(8);
+                sighting.latitude = cursor.getFloat(9);
+                list[counter] = sighting;
+                counter++;
+
+            }
+            cursor.close();
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            return list;
+        }catch (Throwable t) {
+            cursor.close();
+            System.out.println("Error: " + t.getMessage());
+            db.endTransaction();
+            return null;
+        }
+    }
+
+
     public Sighting[] get50sightings() {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -455,6 +495,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return null;
         }
     }
+
+
 
 //    public Sighting[] get10sightings() {
 //        SQLiteDatabase db = getWritableDatabase();
