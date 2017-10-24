@@ -75,8 +75,8 @@ public class ReportPage extends AppCompatActivity {
         }
 
 
-        if (!(ZipCode.contains(validZip))) {
-            Toast.makeText(this, "Please enter a proper Zip Code", Toast.LENGTH_LONG).show();
+        if (!(ZipCode.matches(".*\\d+.*"))) {
+            Toast.makeText(this, "Please enter a proper Zip Code" + ZipCode, Toast.LENGTH_LONG).show();
 
         } else if (dbHelper.addSighting(userID, LocationType, Address, City, Borough, Integer.parseInt(ZipCode.trim())) != -1) {
             Toast.makeText(this, "Successfully Added Sighting", Toast.LENGTH_LONG).show();
