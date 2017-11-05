@@ -48,7 +48,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-    // changed SIGHTINGID FROM LONG TO STRIN
 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;

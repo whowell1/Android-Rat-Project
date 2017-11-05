@@ -496,6 +496,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+
+
+
+
+
+
+
     public Sighting[] get10sightings() {
         Sighting[] sightarr = new Sighting[10];
         sightarr[0] = new Sighting();

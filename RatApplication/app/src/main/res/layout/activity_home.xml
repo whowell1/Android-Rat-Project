@@ -56,10 +56,10 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <Button
-        android:id="@+id/seeSightingBtn"
+        android:id="@+id/sightingInfoBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="See Sighting"
+        android:text="See information"
         app:layout_constraintLeft_toRightOf="@+id/reportBtn"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
