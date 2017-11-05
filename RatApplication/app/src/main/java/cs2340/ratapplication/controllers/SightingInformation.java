@@ -44,7 +44,7 @@ public class SightingInformation extends AppCompatActivity {
 
         seeSightingGraphBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent intent = new Intent(SightingInformation.this, MapsActivity.class);
+                Intent intent = new Intent(SightingInformation.this, ChartsPage.class);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
             }
