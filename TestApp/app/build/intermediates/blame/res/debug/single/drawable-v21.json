@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/build/intermediates/res/merged/debug/drawable-v21/abc_btn_colored_material.xml",
+        "source": "/Users/wren/.android/build-cache/41775b8435fc7ace2595fb7d1f1b279d60fabfbf/output/res/drawable-v21/abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/build/intermediates/res/merged/debug/drawable-v21/abc_action_bar_item_background_material.xml",
+        "source": "/Users/wren/.android/build-cache/41775b8435fc7ace2595fb7d1f1b279d60fabfbf/output/res/drawable-v21/abc_action_bar_item_background_material.xml"
+    },
+    {
+        "merged": "/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/build/intermediates/res/merged/debug/drawable-v21/abc_edit_text_material.xml",
+        "source": "/Users/wren/.android/build-cache/41775b8435fc7ace2595fb7d1f1b279d60fabfbf/output/res/drawable-v21/abc_edit_text_material.xml"
+    },
+    {
+        "merged": "/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/build/intermediates/res/merged/debug/drawable-v21/notification_action_background.xml",
+        "source": "/Users/wren/.android/build-cache/41775b8435fc7ace2595fb7d1f1b279d60fabfbf/output/res/drawable-v21/notification_action_background.xml"
+    }
+]
