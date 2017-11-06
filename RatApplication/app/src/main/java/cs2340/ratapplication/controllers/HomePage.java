@@ -56,7 +56,7 @@ public class HomePage extends AppCompatActivity {
         sightingInfoBtn.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                Intent intent = new Intent(HomePage.this, SightingInformation.class);
+                Intent intent = new Intent(HomePage.this, SearchDatesForChartPage.class);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
             }

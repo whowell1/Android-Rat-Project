@@ -33,13 +33,11 @@ public class ChartsPage extends AppCompatActivity {
         barChart =(BarChart) findViewById(R.id.barchart);
 
 
-
         List<BarEntry> entries = new ArrayList<>();
         entries.add(new BarEntry(0f, 30f));
         entries.add(new BarEntry(1f, 80f));
         entries.add(new BarEntry(2f, 60f));
         entries.add(new BarEntry(3f, 50f));
-        // gap of 2f
         entries.add(new BarEntry(5f, 70f));
         entries.add(new BarEntry(6f, 60f));
 
