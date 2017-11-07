@@ -1,6 +1,7 @@
 package cs2340.ratapplication.controllers;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -25,7 +26,6 @@ public class LoginPage extends AppCompatActivity {
     private Button Login;
     private Button Signup;
     private int counter = 3;
-    DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
 
     @Override
 
@@ -71,18 +71,8 @@ public class LoginPage extends AppCompatActivity {
 
     private void validate(String userName, String userPassword) {
 
-        if (dbHelper.checkPassword(userName, userPassword)) {
-            Intent intent = new Intent(LoginPage.this, HomePage.class);
-            intent.putExtra("userID", dbHelper.getUserID(userName));
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "Improper Login", Toast.LENGTH_LONG).show();
-            counter--;
-            Info.setText("No attempts left: " + String.valueOf(counter));
-            if (counter == 0) {
-                Login.setEnabled(false);
-            }
-        }
+        CheckPasswordAsync cpAsync = new CheckPasswordAsync();
+        cpAsync.execute(userName, userPassword);
     }
 
     @Override
@@ -105,5 +95,32 @@ public class LoginPage extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected class CheckPasswordAsync extends AsyncTask<String,Void, Boolean> {
+        private long userID = 0;
+        protected Boolean doInBackground(String... strs) {
+            boolean validated = DatabaseHelper.checkPassword(strs[0], strs[1]);
+            if(validated) {
+                userID = DatabaseHelper.getUserID(strs[0]);
+            }
+            return validated;
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if(result == true) {
+                Intent intent = new Intent(LoginPage.this, HomePage.class);
+                System.out.println(userID);
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }else {
+                Toast.makeText(LoginPage.this, "Improper Login", Toast.LENGTH_LONG).show();
+                counter--;
+                Info.setText("No attempts left: " + String.valueOf(counter));
+                if (counter == 0) {
+                    Login.setEnabled(false);
+                }
+            }
+        }
     }
 }
