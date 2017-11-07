@@ -96,7 +96,6 @@ public class HomePage extends AppCompatActivity {
             Sighting[] sightings = DatabaseHelper.get50sightings();
             List<String> sightingsNum = new ArrayList<String>();
             for(int i = 0; i< sightings.length; i++) {
-                System.out.println(sightings[i].sightingID);
                 sightingsNum.add("Sighting #" + sightings[i].sightingID);
             }
 

@@ -19,8 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
-
+    private Sighting[] sightings;
 
 
 
@@ -28,6 +27,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps2);
+        sightings = (Sighting[]) getIntent().getSerializableExtra("sightings");
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -51,13 +51,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-//        Sighting listOfMarkers[] = dbHelper.get10sightings();
-
-
         try {
     //
-            Sighting listOfMarkers[] = dbHelper.get10sightings();
+            Sighting[] listOfMarkers = sightings;
             for (int i = 0; i <= listOfMarkers.length; i++) {
+
+                System.out.println(listOfMarkers[i].latitude);
                 LatLng individualMarkers = new LatLng(listOfMarkers[i].latitude, listOfMarkers[i].longitude);
                 mMap.addMarker(new MarkerOptions().position(individualMarkers).title(String.valueOf("sighting id: " + listOfMarkers[i].sightingID)));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(individualMarkers));
@@ -70,10 +69,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             System.out.println(e);
         }
     }
-
-
-
-
 
 
 }

@@ -1,6 +1,7 @@
 package cs2340.ratapplication.controllers;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import org.w3c.dom.Text;
 
 import cs2340.ratapplication.R;
+import cs2340.ratapplication.models.DatabaseHelper;
 
 public class SearchDatesForChartPage extends AppCompatActivity {
     private Button searchForCharts;
@@ -24,8 +26,8 @@ public class SearchDatesForChartPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_dates_for_chart);
-        searchForSighting = (Button) findViewById(R.id.searchForCharts);
-        searchForCharts = (Button) findViewById(R.id.searchForSighting);
+        searchForSighting = (Button) findViewById(R.id.searchForSighting);
+        searchForCharts = (Button) findViewById(R.id.searchForCharts);
         startDateCharts = (EditText) findViewById(R.id.startDateCharts);
         endDateCharts = (EditText) findViewById(R.id.endDateCharts);
 
@@ -33,8 +35,8 @@ public class SearchDatesForChartPage extends AppCompatActivity {
         searchForSighting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SearchDatesForChartPage.this, MapsActivity.class);
-                startActivity(intent);
+                MapAsync mpAsync = new MapAsync();
+                mpAsync.execute();
             }
         });
 
@@ -56,7 +58,24 @@ public class SearchDatesForChartPage extends AppCompatActivity {
 
     }
 
+    protected class MapAsync extends AsyncTask<String,Void, Boolean> {
+        private long userID = 0;
+        protected Boolean doInBackground(String... strs) {
+            try{
+                Intent intent = new Intent(SearchDatesForChartPage.this, MapsActivity.class);
+                intent.putExtra("sightings", DatabaseHelper.get50sightings());
+                startActivity(intent);
+                return true;
+            } catch (Throwable t) {
+                System.out.println(t);
+                return false;
+            }
+        }
 
+        protected void onPostExecute(Boolean result) {
+
+        }
+    }
 
 
 }
