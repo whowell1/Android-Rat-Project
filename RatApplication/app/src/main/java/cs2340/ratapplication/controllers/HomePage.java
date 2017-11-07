@@ -35,6 +35,7 @@ This is the class that handles all of the login
 public class HomePage extends AppCompatActivity {
     private Button Logout;
     private Button Report;
+    private Button sightingInfoBtn;
     private TextView textView;
     private long userID;
     private ListView listView;
@@ -45,13 +46,26 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_home);
+
         userID = getIntent().getLongExtra("userID", 0);
+        sightingInfoBtn = (Button) findViewById(R.id.sightingInfoBtn);
+
         textView = (TextView) findViewById(R.id.isAdmin);
         Logout = (Button) findViewById(R.id.logoutBtn);
         Report = (Button) findViewById(R.id.reportBtn);
         listView = (ListView) findViewById(R.id.reportList);
         System.out.println(userID);
 
+
+
+        sightingInfoBtn.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                Intent intent = new Intent(HomePage.this, SearchDatesForChartPage.class);
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+        });
 
         Logout.setOnClickListener(new View.OnClickListener() {
 
@@ -74,6 +88,9 @@ public class HomePage extends AppCompatActivity {
         DisplayDataAsync ddAsync = new DisplayDataAsync();
         ddAsync.execute();
 
+        /*if(dbHelper.isAdmin(userID)) {
+            textView.setText("Admin Account");
+        }*/
     }
     protected void displayData() {
             Sighting[] sightings = DatabaseHelper.get50sightings();

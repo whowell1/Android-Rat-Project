@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/build/intermediates/res/merged/debug/mipmap-hdpi/ic_launcher.png",
+        "source": "/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/src/main/res/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/build/intermediates/res/merged/debug/mipmap-hdpi/ic_launcher_round.png",
+        "source": "/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/src/main/res/mipmap-hdpi/ic_launcher_round.png"
+    }
+]

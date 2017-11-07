@@ -1,0 +1,7 @@
+#Sun Oct 22 18:27:19 EDT 2017
+base.0=/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_a47b1bb22edc724f7190be40246535d88bb9462f
+renamed.1=classes2.dex
+renamed.0=classes.dex
+file.1=/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_00969baeb918bbe353d6e1af315fe89a21cd2d55/classes.dex
+base.1=/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_00969baeb918bbe353d6e1af315fe89a21cd2d55
+file.0=/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_a47b1bb22edc724f7190be40246535d88bb9462f/classes.dex
