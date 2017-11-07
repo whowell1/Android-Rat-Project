@@ -260,6 +260,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return addSighting(userID, new Timestamp(System.currentTimeMillis()), locationType, address, city, borough, zip, 0, 0);
     }
 
+
+
+
+
+
     public long addSighting(int userID, Timestamp date, String locationType, String address, String city, String borough, int zip, float longitude, float latitude) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -414,6 +419,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return null;
         }
     }
+
+    // --------------------------------------------------------------------------------//
+    // discuss with Thomas tomorrow about how to amke this db helper class
+ // count method
+    public Sighting[] getLat() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        String LONGITUDE_QUERY = String.format("SELECT * FROM %s ORDER BY %s " ,
+                TABLE_SIGHTINGS
+                // whatever Thomas passing in
+
+                ) ;
+       Cursor cursor = db.rawQuery(LONGITUDE_QUERY, null);
+        try {
+            Sighting[] list = new Sighting[50];
+            int counter = 0;
+            while(cursor.moveToNext() && counter < list.length) {
+
+                Sighting sighting =  new Sighting();
+                sighting.longitude = cursor.getFloat(8);
+                sighting.latitude = cursor.getFloat(9);
+                list[counter] = sighting;
+                counter++;
+
+            }
+            cursor.close();
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            return list;
+        }catch (Throwable t) {
+            cursor.close();
+            System.out.println("Error: " + t.getMessage());
+            db.endTransaction();
+            return null;
+        }
+    }
+
+
     public Sighting[] get50sightings() {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -452,4 +495,124 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return null;
         }
     }
+
+
+
+
+
+
+
+
+    public Sighting[] get10sightings() {
+        Sighting[] sightarr = new Sighting[10];
+        sightarr[0] = new Sighting();
+        sightarr[0].latitude = 40.70777155363643;
+        sightarr[0].longitude = -74.01296309970473;
+        sightarr[0].sightingID = 1;
+
+
+        sightarr[1] = new Sighting();
+        sightarr[1].latitude = 40.575209242947444;
+        sightarr[1].longitude = -74.1045465185469;
+        sightarr[1].sightingID = 2;
+
+
+        sightarr[2] = new Sighting();
+        sightarr[2].latitude = 40.63123555151668;
+        sightarr[2].longitude = -74.12687759748677;
+        sightarr[2].sightingID = 3;
+
+
+
+        sightarr[3] = new Sighting();
+        sightarr[3].latitude = 40.70898692345805;
+        sightarr[3].longitude = -73.94120690238431;
+        sightarr[3].sightingID = 4;
+
+
+        sightarr[4] = new Sighting();
+        sightarr[4].latitude = 40.85413014360452;
+        sightarr[4].longitude = -73.86481331044513;
+        sightarr[4].sightingID = 5;
+
+
+
+        sightarr[5] = new Sighting();
+        sightarr[5].latitude = 40.67722299833378;
+        sightarr[5].longitude = -73.99871293635606;
+        sightarr[5].sightingID = 6;
+
+
+        sightarr[6] = new Sighting();
+        sightarr[6].latitude = 40.767627333732726;
+        sightarr[6].longitude = -73.82411151243869;
+        sightarr[6].sightingID = 7;
+
+
+
+        sightarr[7] = new Sighting();
+        sightarr[7].latitude = 40.69587826384473;
+        sightarr[7].longitude = -73.96149989735699;
+        sightarr[7].sightingID = 8;
+
+
+        sightarr[8] = new Sighting();
+        sightarr[8].latitude = 40.74018431877025;
+        sightarr[8].longitude = -73.986362997997;
+        sightarr[8].sightingID = 8;
+
+
+
+        sightarr[9] = new Sighting();
+        sightarr[9].latitude = 40.637298077884196;
+        sightarr[9].longitude = -74.16236493414125;
+        sightarr[9].sightingID = 10;
+
+
+        return sightarr;
+
+
+    }
+
+//    public Sighting[] get10sightings() {
+//        SQLiteDatabase db = getWritableDatabase();
+//        db.beginTransaction();
+//        String SIGHTINGS_QUERY = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT 10",
+//                TABLE_SIGHTINGS,
+//                KEY_SIGHTINGS_DATE
+//        );
+//        Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
+//        try {
+//            Sighting[] list = new Sighting[50];
+//            int counter = 0;
+//            while(cursor.moveToNext() && counter <50) {
+//
+//                Sighting sighting =  new Sighting();
+//                sighting.sightingID = cursor.getLong(0);
+//                sighting.userID = cursor.getInt(1);
+//                sighting.locationType = cursor.getString(3);
+//                sighting.address = cursor.getString(4);
+//                sighting.city = cursor.getString(5);
+//                sighting.borough = cursor.getString(6);
+//                sighting.zip = cursor.getInt(7);
+//                sighting.longitude = cursor.getFloat(8);
+//                sighting.latitude = cursor.getFloat(9);
+//                list[counter] = sighting;
+//                counter++;
+//
+//            }
+//            cursor.close();
+//            db.setTransactionSuccessful();
+//            db.endTransaction();
+//            return list;
+//        }catch (Throwable t) {
+//            cursor.close();
+//            System.out.println("Error: " + t.getMessage());
+//            db.endTransaction();
+//            return null;
+//        }
+//    }
+
+
+
 }

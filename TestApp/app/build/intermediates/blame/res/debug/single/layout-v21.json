@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/build/intermediates/res/merged/debug/layout-v21/notification_action.xml",
+        "source": "/Users/wren/.android/build-cache/41775b8435fc7ace2595fb7d1f1b279d60fabfbf/output/res/layout-v21/notification_action.xml"
+    },
+    {
+        "merged": "/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/build/intermediates/res/merged/debug/layout-v21/notification_template_icon_group.xml",
+        "source": "/Users/wren/.android/build-cache/41775b8435fc7ace2595fb7d1f1b279d60fabfbf/output/res/layout-v21/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/build/intermediates/res/merged/debug/layout-v21/notification_template_custom_big.xml",
+        "source": "/Users/wren/.android/build-cache/41775b8435fc7ace2595fb7d1f1b279d60fabfbf/output/res/layout-v21/notification_template_custom_big.xml"
+    },
+    {
+        "merged": "/Users/wren/Desktop/Android-Rat-Project/Android-Rat-Project/TestApp/app/build/intermediates/res/merged/debug/layout-v21/notification_action_tombstone.xml",
+        "source": "/Users/wren/.android/build-cache/41775b8435fc7ace2595fb7d1f1b279d60fabfbf/output/res/layout-v21/notification_action_tombstone.xml"
+    }
+]
