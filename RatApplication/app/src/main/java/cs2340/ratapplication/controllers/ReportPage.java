@@ -1,6 +1,7 @@
 package cs2340.ratapplication.controllers;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,15 +20,14 @@ public class ReportPage extends AppCompatActivity {
     private EditText Borough;
     private Button Submit;
     private Button Cancel;
-    private DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
 
-    private int userID;
+    private long userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-        userID = getIntent().getIntExtra("userID", 0);
+        userID = getIntent().getLongExtra("userID", 0);
         System.out.println("UserID: " + userID);
 
         LocationType = (EditText)findViewById(R.id.LocationType);
@@ -67,9 +67,21 @@ public class ReportPage extends AppCompatActivity {
      */
     private void validate(String LocationType, String Address, String City,
                            String Borough,String ZipCode) {
-        if(dbHelper.addSighting(userID, LocationType, Address, City, Borough, Integer.parseInt(ZipCode.trim())) != -1) {
-            Toast.makeText(this,"Successfully Added Sighting", Toast.LENGTH_LONG).show();
+        AddReportAsync arAsync = new AddReportAsync();
+        arAsync.execute(userID + "", LocationType, Address, City, Borough, ZipCode);
+
+    }
+    protected class AddReportAsync extends AsyncTask<String,Void, Long> {
+        protected Long doInBackground(String... strs) {
+             return DatabaseHelper.addSighting(Long.parseLong(strs[0]), strs[1], strs[2], strs[3], strs[4], Integer.parseInt(strs[5]));
         }
 
+        protected void onPostExecute(Long result) {
+            if(result == -1) {
+                Toast.makeText(ReportPage.this, "Failed Adding Sighting", Toast.LENGTH_LONG).show();
+            }else {
+                Toast.makeText(ReportPage.this, "Successfully Added Sighting", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

@@ -6,19 +6,25 @@ import android.database.Cursor;
 import android.database.sqlite.*;
 import android.content.Context;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
  * Created by thoma on 10/9/2017.
  */
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper {
     private static DatabaseHelper sInstance;
 
-    private static final String DATABASE_NAME = "AppDatabase";
+    private static final String DATABASE_NAME = "ratappdb";
     private static final int DATABASE_VERSION = 1;
 
     // Table Names
@@ -28,7 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Sightings Table Columns
     private static final String KEY_SIGHTING_ID = "id";
-    private static final String KEY_SIGHTINGS_USER_ID_FK = "userId";
+    private static final String KEY_SIGHTINGS_USER_ID_FK = "userID";
     private static final String KEY_SIGHTINGS_DATE = "date";
     private static final String KEY_SIGHTINGS_LOC = "locationType";
     private static final String KEY_SIGHTINGS_ADDRESS = "address";
@@ -40,415 +46,176 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //User Table Columns
     private static final String KEY_USER_ID = "id";
-    private static final String KEY_USER_NAME = "userName";
+    private static final String KEY_USER_NAME = "username";
     private static final String KEY_USER_PASSWORD = "password";
     private static final String KEY_USER_ISADMIN = "isAdmin";
 
-    public static synchronized DatabaseHelper getInstance(Context context) {
-        // Use the application context, which will ensure that you
-        // don't accidentally leak an Activity's context.
-        // See this article for more information: http://bit.ly/6LRzfx
-        if (sInstance == null) {
-            sInstance = new DatabaseHelper(context);
-        }
-        return sInstance;
-    }
-
-    /**
-     * Constructor should be private to prevent direct instantiation.
-     * Make a call to the static method "getInstance()" instead.
-     */
-    private DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    // Called when the database connection is being configured.
-    // Configure database settings for things like foreign key support, write-ahead logging, etc.
-    @Override
-    public void onConfigure(SQLiteDatabase db) {
-        super.onConfigure(db);
-        db.setForeignKeyConstraintsEnabled(true);
-    }
-
-    // Called when the database is created for the FIRST time.
-    // If a database already exists on disk with the same DATABASE_NAME, this method will NOT be called.
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS +
-                "(" +
-                KEY_USER_ID + " INTEGER PRIMARY KEY," +
-                KEY_USER_NAME + " TEXT," +
-                KEY_USER_PASSWORD + " TEXT," +
-                KEY_USER_ISADMIN + " BOOLEAN" +
-                ")";
-
-        String CREATE_POSTS_TABLE = "CREATE TABLE " + TABLE_SIGHTINGS +
-                "(" +
-                KEY_SIGHTING_ID + " INTEGER PRIMARY KEY," + // Define a primary key
-                KEY_SIGHTINGS_USER_ID_FK + " INTEGER REFERENCES " + TABLE_USERS + "," + // Define a foreign key
-                KEY_SIGHTINGS_DATE + " TEXT," +
-                KEY_SIGHTINGS_LOC + " TEXT," +
-                KEY_SIGHTINGS_ADDRESS + " TEXT," +
-                KEY_SIGHTINGS_CITY + " TEXT," +
-                KEY_SIGHTINGS_BOROUGH + " TEXT," +
-                KEY_SIGHTINGS_ZIP + " INTEGER," +
-                KEY_SIGHTINGS_LAT + " FLOAT(5)," +
-                KEY_SIGHTINGS_LONG + " FLOAT(5)" +
-                ")";
-
-        System.out.println("Create Table: " + CREATE_USERS_TABLE);
-        db.execSQL(CREATE_POSTS_TABLE);
-        db.execSQL(CREATE_USERS_TABLE);
-    }
-
-    // Called when the database needs to be upgraded.
-    // This method will only be called if a database already exists on disk with the same DATABASE_NAME,
-    // but the DATABASE_VERSION is different than the version of the database that exists on disk.
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion != newVersion) {
-            // Simplest implementation is to drop all old tables and recreate them
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_SIGHTINGS);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
-            onCreate(db);
-        }
-    }
-
-    public void destroyPreviousDB() {
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SIGHTINGS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
-        onCreate(db);
-    }
-
-    public long addUser(String username, String password) {
+    public static long addUser(String username, String password) {
         return addUser(username, password, false);
 
     }
-    public long addUser(String username, String password, boolean isAdmin) {
+    public static long addUser(String username, String password, boolean isAdmin) {
         username = username.trim();
         password = password.trim();
 
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-
-        String USER_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%s'",
-        TABLE_USERS,
-        TABLE_USERS, KEY_USER_NAME,
-        username);
-        Cursor cursor = db.rawQuery(USER_QUERY,null);
+        connectToAPI con = new connectToAPI();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(KEY_USER_NAME, username);
+        map.put(KEY_USER_PASSWORD, password);
+        map.put(KEY_USER_ISADMIN, Boolean.toString(isAdmin));
         try {
-            if(cursor.moveToFirst()) {
-                cursor.close();
-                db.endTransaction();
-                return -1;
-            } else {
-                ContentValues values = new ContentValues();
-                values.put(KEY_USER_NAME, username);
-                values.put(KEY_USER_PASSWORD, password);
-                values.put(KEY_USER_ISADMIN, isAdmin);
+            JSONObject json = con.sendingPostRequest("addUser", map).getJSONObject(0);
+            return json.getLong("insertId");
+        }catch(Throwable t) {
+            System.out.println(t);
+            return -1;
+        }
 
-                long userID = db.insert(TABLE_USERS, null, values); //null to autoincrement primary key
-                cursor.close();
-                db.setTransactionSuccessful();
-                db.endTransaction();
-                return userID;
-            }
-        } catch(Throwable t) {
-            db.endTransaction();
-            System.out.println("Error: "+ t.getMessage());
+    }
+
+    public static boolean checkPassword(String username, String password) {
+        username = username.trim();
+        password = password.trim();
+
+        connectToAPI con = new connectToAPI();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(KEY_USER_NAME, username);
+        map.put(KEY_USER_PASSWORD, password);
+
+        try {
+            JSONObject json = con.sendingGetRequest("checkPassword", map).getJSONObject(0);
+            return json.getBoolean("validated");
+        }catch(Throwable t) {
+            System.out.println(t);
+            return false;
+        }
+    }
+
+    public boolean isAdmin(int userID) {
+        connectToAPI con = new connectToAPI();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(KEY_USER_ID, userID);
+
+        try {
+            JSONObject json = con.sendingGetRequest("isAdmin", map).getJSONObject(0);
+            return json.getBoolean("isAdmin");
+        }catch(Throwable t) {
+            System.out.println(t);
+            return false;
+        }
+    }
+
+    public static long getUserID(String username) {
+        username = username.trim();
+
+        connectToAPI con = new connectToAPI();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(KEY_USER_NAME, username);
+
+        try {
+            JSONObject json = con.sendingGetRequest("getUserID", map).getJSONObject(0);
+            return json.getLong("id");
+        }catch(Throwable t) {
+            System.out.println(t);
             return -1;
         }
     }
 
-    public boolean checkPassword(String username, String password) {
-        username = username.trim();
-        password = password.trim();
 
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
+    public static long addSighting(long userID, String locationType, String address, String city, String borough, int zip) {
 
-        String USER_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%s'",
-                TABLE_USERS,
-                TABLE_USERS, KEY_USER_NAME,
-                username);
-        Cursor cursor = db.rawQuery(USER_QUERY,null);
+        return addSighting(userID, new Timestamp(System.currentTimeMillis()).toString().substring(0, 10), locationType, address, city, borough, zip, "0", "0");
+    }
+
+    public static long addSighting(long userID, String date, String locationType, String address, String city, String borough, int zip, String longitude, String latitude) {
+
+        connectToAPI con = new connectToAPI();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(KEY_SIGHTINGS_USER_ID_FK, userID);
+        map.put(KEY_SIGHTINGS_DATE, date);
+        map.put(KEY_SIGHTINGS_LOC, locationType);
+        map.put(KEY_SIGHTINGS_ADDRESS, address);
+        map.put(KEY_SIGHTINGS_CITY, city);
+        map.put(KEY_SIGHTINGS_BOROUGH, borough);
+        map.put(KEY_SIGHTINGS_ZIP, zip);
+        map.put(KEY_SIGHTINGS_LONG, longitude);
+        map.put(KEY_SIGHTINGS_LAT, latitude);
+
         try {
-            if(cursor.moveToFirst()) {
-                if(cursor.getString(2).equals(password)) {
-                    cursor.close();
-                    db.setTransactionSuccessful();
-                    db.endTransaction();
-                    return true;
-                }
-            } else {
-                cursor.close();
-                db.setTransactionSuccessful();
-                db.endTransaction();
-                return false;
-            }
-        } catch(Throwable t) {
-            db.endTransaction();
-            cursor.close();
-            System.out.println("Error: " + t.getMessage());
-            return false;
+            JSONObject json = con.sendingPostRequest("addSighting", map).getJSONObject(0);
+            return json.getLong("insertId");
+        }catch(Throwable t) {
+            System.out.println(t);
+            return -1;
         }
-        return false;
-    }
-
-    public boolean isAdmin(int userID) {
-
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-
-        String USER_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%s'",
-                TABLE_USERS,
-                TABLE_USERS, KEY_USER_ID,
-                userID);
-        Cursor cursor = db.rawQuery(USER_QUERY,null);
-        try {
-            if(cursor.moveToFirst()) {
-                if(Boolean.parseBoolean(cursor.getString(3))) {
-                    cursor.close();
-                    db.setTransactionSuccessful();
-                    db.endTransaction();
-                    return true;
-                }
-            } else {
-                cursor.close();
-                db.setTransactionSuccessful();
-                db.endTransaction();
-                return false;
-            }
-        } catch(Throwable t) {
-            cursor.close();
-            db.endTransaction();
-            System.out.println("Error: " + t.getMessage());
-        }
-        return false;
-    }
-
-    public int getUserID(String username) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-
-        String SIGHTINGS_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%s'",
-                TABLE_USERS,
-                TABLE_USERS, KEY_USER_NAME,
-                username
-        );
-        Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
-        try {
-            if(cursor.moveToFirst()) {
-                db.endTransaction();
-                System.out.println("UserId: " + cursor.getInt(0));
-                return (cursor.getInt(0));
-            }else {
-                throw new NoSuchElementException();
-            }
-
-        }catch (Throwable t) {
-            db.endTransaction();
-            System.out.println("Error: " + t.getMessage());
-            return 0;
-        }
-    }
-
-
-    public long addSighting(int userID, String locationType, String address, String city, String borough, int zip) {
-
-        return addSighting(userID, new Timestamp(System.currentTimeMillis()), locationType, address, city, borough, zip, 0, 0);
-    }
-
-    public long addSighting(int userID, Timestamp date, String locationType, String address, String city, String borough, int zip, float longitude, float latitude) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        try {
-            ContentValues values = new ContentValues();
-            values.put(KEY_SIGHTINGS_USER_ID_FK, userID);
-            values.put(KEY_SIGHTINGS_DATE, date.toString());
-            values.put(KEY_SIGHTINGS_LOC, locationType);
-            values.put(KEY_SIGHTINGS_ADDRESS, address);
-            values.put(KEY_SIGHTINGS_CITY, city);
-            values.put(KEY_SIGHTINGS_BOROUGH, borough);
-            values.put(KEY_SIGHTINGS_ZIP, zip);
-            values.put(KEY_SIGHTINGS_LONG, longitude);
-            values.put(KEY_SIGHTINGS_LAT, latitude);
-
-            long sightingID = db.insert(TABLE_SIGHTINGS, null, values); //null to autoincrement primary key
-            db.setTransactionSuccessful();
-            db.endTransaction();
-            return sightingID;
-
-        }catch (Throwable t) {
-            db.endTransaction();
-            System.out.println("Error: " + t.getMessage());
-        }
-        return -1;
 
     }
-    public boolean sightingsEmpty() {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
 
-        String SIGHTINGS_QUERY = String.format("SELECT COUNT(*) FROM %s", TABLE_SIGHTINGS);
-        Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
+    public static Sighting getSighting(long sightingID) {
+        connectToAPI con = new connectToAPI();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(KEY_USER_ID, sightingID);
 
         try {
-            if(cursor.moveToFirst()) {
-                System.out.println("NUM ROWS: " + cursor.getInt(0));
-                return cursor.getInt(0) == 0;
-            }else {
-                return false;
-            }
-        }catch (Throwable t) {
-            db.endTransaction();
-            System.out.println("Error: " + t.getMessage());
-        }
-        return false;
-    }
+            JSONObject json = con.sendingGetRequest("getSightingByID", map).getJSONObject(0);
+            Sighting sighting =  new Sighting();
+            sighting.userID = json.getInt(KEY_SIGHTINGS_USER_ID_FK);
+            sighting.locationType = json.getString(KEY_SIGHTINGS_LOC);
+            sighting.address = json.getString(KEY_SIGHTINGS_ADDRESS);
+            sighting.city = json.getString(KEY_SIGHTINGS_CITY);
+            sighting.borough = json.getString(KEY_SIGHTINGS_BOROUGH);
+            sighting.zip = json.getInt(KEY_SIGHTINGS_ZIP);
+            sighting.longitude = json.getDouble(KEY_SIGHTINGS_LONG);
+            sighting.latitude = json.getDouble(KEY_SIGHTINGS_LAT);
 
-    public Sighting getSighting(int sightingID) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
+            return sighting;
 
-        String SIGHTINGS_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%d'",
-                TABLE_SIGHTINGS,
-                TABLE_SIGHTINGS, KEY_SIGHTING_ID,
-                sightingID);
-        Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
-        try {
-            if(cursor.moveToFirst()) {
-                Sighting sighting =  new Sighting();
-                sighting.userID = cursor.getInt(1);
-                sighting.locationType = cursor.getString(3);
-                sighting.address = cursor.getString(4);
-                sighting.city = cursor.getString(5);
-                sighting.borough = cursor.getString(6);
-                sighting.zip = cursor.getInt(7);
-                sighting.longitude = cursor.getFloat(8);
-                sighting.latitude = cursor.getFloat(9);
-                cursor.close();
-                db.setTransactionSuccessful();
-                db.endTransaction();
-                return sighting;
-            }else {
-                throw new NoSuchElementException();
-            }
-        }catch (Throwable t) {
-            System.out.println("Error: " + t.getMessage());
-            db.endTransaction();
+        }catch(Throwable t) {
+            System.out.println(t);
             return null;
         }
     }
-    public List<Sighting> getAllSightingsFromUser(String username) {
+    public static List<Sighting> getAllSightingsFromUser(String username) {
         return getAllSightingsFromUser(getUserID(username));
     }
 
-    public List<Sighting> getAllSightingsFromUser(int userID) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-
-        String SIGHTINGS_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%d'",
-                TABLE_SIGHTINGS,
-                TABLE_SIGHTINGS, KEY_SIGHTINGS_USER_ID_FK,
-                userID);
-        Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
-        try {
-            List<Sighting> list = new ArrayList<Sighting>();
-            while(cursor.moveToNext()) {
-
-                Sighting sighting =  new Sighting();
-                sighting.userID = cursor.getInt(1);
-                sighting.locationType = cursor.getString(3);
-                sighting.address = cursor.getString(4);
-                sighting.city = cursor.getString(5);
-                sighting.borough = cursor.getString(6);
-                sighting.zip = cursor.getInt(7);
-                sighting.longitude = cursor.getFloat(8);
-                sighting.latitude = cursor.getFloat(9);
-                list.add(sighting);
-
-            }
-            cursor.close();
-            db.setTransactionSuccessful();
-            db.endTransaction();
-            return list;
-        }catch (Throwable t) {
-            System.out.println("Error: " + t.getMessage());
-            db.endTransaction();
-            return null;
-        }
+    public static List<Sighting> getAllSightingsFromUser(long userID) {
+        //TO DO
+        return null;
     }
 
-    public List<Sighting> getAllSightings() {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        String SIGHTINGS_QUERY = String.format("SELECT * FROM %s",
-                TABLE_SIGHTINGS
-                );
-        Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
-        try {
-            List<Sighting> list = new ArrayList<Sighting>();
-            while(cursor.moveToNext()) {
-
-                Sighting sighting =  new Sighting();
-                sighting.userID = cursor.getInt(1);
-                sighting.locationType = cursor.getString(3);
-                sighting.address = cursor.getString(4);
-                sighting.city = cursor.getString(5);
-                sighting.borough = cursor.getString(6);
-                sighting.zip = cursor.getInt(7);
-                sighting.longitude = cursor.getFloat(8);
-                sighting.latitude = cursor.getFloat(9);
-                list.add(sighting);
-
-            }
-            cursor.close();
-            db.setTransactionSuccessful();
-            db.endTransaction();
-            return list;
-        }catch (Throwable t) {
-            System.out.println("Error: " + t.getMessage());
-            db.endTransaction();
-            return null;
-        }
+    public static List<Sighting> getAllSightings() {
+        //TO DO
+        return null;
     }
-    public Sighting[] get50sightings() {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        String SIGHTINGS_QUERY = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT 50",
-                TABLE_SIGHTINGS,
-                KEY_SIGHTINGS_DATE
-        );
-        Cursor cursor = db.rawQuery(SIGHTINGS_QUERY,null);
+    public static Sighting[] get50sightings() {
+        connectToAPI con = new connectToAPI();
+        Map<String, Object> map = new HashMap<String, Object>();
+
         try {
-            Sighting[] list = new Sighting[50];
-            int counter = 0;
-            while(cursor.moveToNext() && counter <50) {
-
+            JSONArray response =  con.sendingGetRequest("get50Sightings", map);
+            System.out.println(response);
+            Sighting[] sightings = new Sighting[50];
+            int count = 0;
+            for(int i = 0; i < response.length(); i++) {
+                JSONObject json = response.getJSONObject(i);
                 Sighting sighting =  new Sighting();
-                sighting.sightingID = cursor.getLong(0);
-                sighting.userID = cursor.getInt(1);
-                sighting.locationType = cursor.getString(3);
-                sighting.address = cursor.getString(4);
-                sighting.city = cursor.getString(5);
-                sighting.borough = cursor.getString(6);
-                sighting.zip = cursor.getInt(7);
-                sighting.longitude = cursor.getFloat(8);
-                sighting.latitude = cursor.getFloat(9);
-                list[counter] = sighting;
-                counter++;
-
+                sighting.sightingID = json.getLong(KEY_SIGHTING_ID);
+                sighting.userID = json.getInt(KEY_SIGHTINGS_USER_ID_FK);
+                sighting.locationType = json.getString(KEY_SIGHTINGS_LOC);
+                sighting.address = json.getString(KEY_SIGHTINGS_ADDRESS);
+                sighting.city = json.getString(KEY_SIGHTINGS_CITY);
+                sighting.borough = json.getString(KEY_SIGHTINGS_BOROUGH);
+                sighting.zip = json.getInt(KEY_SIGHTINGS_ZIP);
+                sighting.longitude = json.getDouble(KEY_SIGHTINGS_LONG);
+                sighting.latitude = json.getDouble(KEY_SIGHTINGS_LAT);
+                sightings[count] = sighting;
+                count++;
             }
-            cursor.close();
-            db.setTransactionSuccessful();
-            db.endTransaction();
-            return list;
-        }catch (Throwable t) {
-            cursor.close();
-            System.out.println("Error: " + t.getMessage());
-            db.endTransaction();
+            return sightings;
+
+        }catch(Throwable t) {
+            System.out.println(t);
             return null;
         }
     }

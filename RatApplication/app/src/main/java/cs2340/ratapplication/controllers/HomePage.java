@@ -1,6 +1,7 @@
 package cs2340.ratapplication.controllers;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.net.URISyntaxException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -33,21 +36,21 @@ public class HomePage extends AppCompatActivity {
     private Button Logout;
     private Button Report;
     private TextView textView;
-    private int userID;
+    private long userID;
     private ListView listView;
-    private DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_home);
-        userID = getIntent().getIntExtra("userID", 0);
+        userID = getIntent().getLongExtra("userID", 0);
         textView = (TextView) findViewById(R.id.isAdmin);
         Logout = (Button) findViewById(R.id.logoutBtn);
         Report = (Button) findViewById(R.id.reportBtn);
         listView = (ListView) findViewById(R.id.reportList);
-
+        System.out.println(userID);
 
 
         Logout.setOnClickListener(new View.OnClickListener() {
@@ -68,103 +71,15 @@ public class HomePage extends AppCompatActivity {
             }
         });
 
-        if(dbHelper.isAdmin(userID)) {
-            textView.setText("Admin Account");
-        }
-        displayData();
-
-    }
-
-    protected void loadData() throws FileNotFoundException, URISyntaxException {
-        Scanner dataFile = new Scanner(getResources().openRawResource(
-                getResources().getIdentifier("ratdata", "raw", getPackageName()))
-        );
-        dataFile.useDelimiter(",");
-        int counter = 0;
-        String[] data = new String[7];
-        //removes labels
-        while (dataFile.hasNext() && counter < 51) {
-            String fix = dataFile.next();
-            counter++;
-        }
-
-        counter = 0;
-        int entryCounter = 0;
-        boolean offset = false;
-        while (dataFile.hasNext() && entryCounter < 10000) {
-            counter = 0;
-            data = new String[7];
-            while (counter < 52 && dataFile.hasNext()) {
-                if(!(offset && counter == 0)) {
-                    String val = dataFile.next();
-                    switch (counter) {
-                        case 7:
-                            data[0] = val;
-                            break;
-                        case 8:
-                            data[4] = val;
-                            break;
-                        case 9:
-                            data[1] = val;
-                            break;
-                        case 16:
-                            data[2] = val;
-                            break;
-                        case 23:
-                            data[3] = val;
-                            break;
-                        case 49:
-                            data[5] = val;
-
-                            break;
-                        case 50:
-                            data[6] = val;
-                            break;
-                        default:
-                            break;
-
-                    }
-                } else {
-                    offset = false;
-                }
-                counter++;
-            }
-            try {
-                //Exception handling for empty strings for zip, longitude and latitude
-                if(data[5].trim().equals("") && data[6].trim().equals("")) {
-                    //System.out.println("OFFSET FIX-----------");
-                    offset = true;
-                }
-                if (data[4].equals("")) {
-                    data[4] = "0";
-                }
-                if(data[5].equals("")) {
-                    data[5] = "0";
-                }
-                if(data[6].equals("")) {
-                    data[6] = "0";
-                }
-                dbHelper.addSighting(userID, new Timestamp(System.currentTimeMillis()), data[0], data[1], data[2], data[3], Integer.parseInt(data[4]), Float.parseFloat(data[5]), Float.parseFloat(data[6]));
-            }catch (Throwable t) {
-                System.out.println("Error: " + t.getMessage());
-            }
-            entryCounter++;
-
-        }
-
+        DisplayDataAsync ddAsync = new DisplayDataAsync();
+        ddAsync.execute();
 
     }
     protected void displayData() {
-        if(dbHelper.sightingsEmpty()) {
-            try {
-                loadData();
-            }catch(Throwable t){
-                System.out.println("Error: " + t.getMessage());
-            }
-        }
-            Sighting[] sightings = dbHelper.get50sightings();
+            Sighting[] sightings = DatabaseHelper.get50sightings();
             List<String> sightingsNum = new ArrayList<String>();
             for(int i = 0; i< sightings.length; i++) {
+                System.out.println(sightings[i].sightingID);
                 sightingsNum.add("Sighting #" + sightings[i].sightingID);
             }
 
@@ -176,10 +91,29 @@ public class HomePage extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, sightingsNum);
-            listView.setAdapter(adapter);
+            final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, sightingsNum);
 
-            Sighting sight = dbHelper.getSighting(1000);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    listView.setAdapter(adapter);
+                }
+            });
     }
+    protected class DisplayDataAsync extends AsyncTask<String,Void, Boolean> {
+        private long userID = 0;
+        protected Boolean doInBackground(String... strs) {
+            try{
+                displayData();
+                return true;
+            } catch (Throwable t) {
+                System.out.println(t);
+                return false;
+            }
+        }
 
+        protected void onPostExecute(Boolean result) {
+            Toast.makeText(HomePage.this, "Finished Loading", Toast.LENGTH_LONG).show();
+        }
+    }
 }

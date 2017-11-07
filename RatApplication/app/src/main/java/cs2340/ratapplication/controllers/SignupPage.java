@@ -1,6 +1,7 @@
 package cs2340.ratapplication.controllers;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -11,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ArrayAdapter;
+
+import org.json.JSONObject;
 
 import cs2340.ratapplication.R;
 import cs2340.ratapplication.models.DatabaseHelper;
@@ -30,7 +33,6 @@ public class SignupPage extends AppCompatActivity {
     private Button Signup;
     private Button Back;
     private Spinner AdminSpinner;
-    private DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
     @Override
 
 
@@ -73,17 +75,12 @@ public class SignupPage extends AppCompatActivity {
     * appears which is an intent
      */
 
-    private void validate(String userName, String userPassword) {
-        if ((userName.contains("@") && userPassword.length() >= 7)){
+    private void validate(String username, String userPassword) {
+        if ((username.contains("@") && userPassword.length() >= 7)){
+            addUserAsync async = new addUserAsync();
+            async.execute(username, userPassword, Boolean.toString(AdminSpinner.getSelectedItem().equals("Admin")));
 
-            if(dbHelper.addUser(userName, userPassword, AdminSpinner.getSelectedItem().equals("Admin")) == -1) {
-                Toast.makeText(this,"User already exists", Toast.LENGTH_LONG).show();
-            }else {
-                Intent intent = new Intent(SignupPage.this, HomePage.class);
-                intent.putExtra("userID", dbHelper.getUserID(userName));
-                startActivity(intent);
-            }
-        } else  if(!userName.contains("@")) {
+        } else  if(!username.contains("@")) {
             Toast.makeText(this,"Must enter a valid email", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this,"Password must be longer than 7", Toast.LENGTH_LONG).show();
@@ -111,5 +108,26 @@ public class SignupPage extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-}
 
+    protected class addUserAsync extends AsyncTask<String,Void, Long> {
+        private String username;
+        protected Long doInBackground(String... strs) {
+            username = strs[0];
+            System.out.println();
+            return DatabaseHelper.addUser(strs[0], strs[1], Boolean.parseBoolean(strs[2]));
+
+        }
+
+        protected void onPostExecute(Long result) {
+            if(result == -1) {
+                Toast.makeText(SignupPage.this,"User already exists", Toast.LENGTH_LONG).show();
+
+            }else {
+                System.out.println("Result: " + result);
+                Intent intent = new Intent(SignupPage.this, HomePage.class);
+                intent.putExtra("userID", result);
+                startActivity(intent);
+            }
+        }
+    }
+}
