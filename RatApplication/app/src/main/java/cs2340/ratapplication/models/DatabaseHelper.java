@@ -127,7 +127,7 @@ public class DatabaseHelper {
         return addSighting(userID, new Timestamp(System.currentTimeMillis()).toString().substring(0, 10), locationType, address, city, borough, zip, "0", "0");
     }
 
-    public static long addSighting(long userID, String date, String locationType, String address, String city, String borough, int zip, String longitude, String latitude) {
+    public static long addSighting(long userID, String date, String locationType, String address, String city, String borough, int zip, String latitude, String longitude) {
 
         connectToAPI con = new connectToAPI();
         Map<String, Object> map = new HashMap<String, Object>();
