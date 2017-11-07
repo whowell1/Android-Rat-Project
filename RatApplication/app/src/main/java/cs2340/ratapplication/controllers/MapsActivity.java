@@ -52,19 +52,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         try {
-    //
             Sighting[] listOfMarkers = sightings;
             for (int i = 0; i <= listOfMarkers.length; i++) {
-
                 System.out.println(listOfMarkers[i].latitude);
                 LatLng individualMarkers = new LatLng(listOfMarkers[i].latitude, listOfMarkers[i].longitude);
                 mMap.addMarker(new MarkerOptions().position(individualMarkers).title(String.valueOf("sighting id: " + listOfMarkers[i].sightingID)));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(individualMarkers));
             }
 
-
         }
-
         catch (Exception e) {
             System.out.println(e);
         }

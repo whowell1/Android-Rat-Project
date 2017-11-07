@@ -125,7 +125,6 @@ public class connectToAPI {
 
             return new JSONArray(response.toString());
 
-
         }catch(Throwable t) {
             System.out.println(t);
             return new JSONArray();
