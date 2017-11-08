@@ -223,9 +223,8 @@ public class DatabaseHelper {
 
         try {
             JSONArray response =  con.sendingGetRequest("getSightingsInRange", map);
-            System.out.println(response);
             Sighting[] sightings = new Sighting[response.length()];
-            int count = 0;
+
             for(int i = 0; i < response.length(); i++) {
                 JSONObject json = response.getJSONObject(i);
                 Sighting sighting =  new Sighting();
@@ -238,10 +237,38 @@ public class DatabaseHelper {
                 sighting.zip = json.getInt(KEY_SIGHTINGS_ZIP);
                 sighting.longitude = json.getDouble(KEY_SIGHTINGS_LONG);
                 sighting.latitude = json.getDouble(KEY_SIGHTINGS_LAT);
-                sightings[count] = sighting;
-                count++;
+                sightings[i] = sighting;
+
             }
             return sightings;
+
+        }catch(Throwable t) {
+            System.out.println(t);
+            return null;
+        }
+    }
+
+    public static MonthCount[] getSightingsCountByMonth(String start, String end) {
+        connectToAPI con = new connectToAPI();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("start", start);
+        map.put("end", end);
+
+        try {
+            JSONArray response =  con.sendingGetRequest("getSightingsCountByMonth", map);
+            System.out.println(response);
+            MonthCount[] count = new MonthCount[response.length()];
+
+            for(int i = 0; i < response.length(); i++) {
+                JSONObject json = response.getJSONObject(i);
+                count[i] = new MonthCount();
+                count[i].year = json.getInt("year");
+                count[i].month = json.getInt("month");
+                count[i].count = json.getInt("count");
+            }
+
+
+            return count;
 
         }catch(Throwable t) {
             System.out.println(t);

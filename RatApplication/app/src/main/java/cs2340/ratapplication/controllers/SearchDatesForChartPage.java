@@ -64,8 +64,7 @@ public class SearchDatesForChartPage extends AppCompatActivity {
         searchForCharts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SearchDatesForChartPage.this, ChartsPage.class);
-                startActivity(intent);
+                validateForChart(start, end);
             }
         });
 
@@ -165,6 +164,33 @@ public class SearchDatesForChartPage extends AppCompatActivity {
             try{
                 Intent intent = new Intent(SearchDatesForChartPage.this, MapsActivity.class);
                 intent.putExtra("sightings", DatabaseHelper.getSightingsInRange(strs[0],  strs[1]));
+                startActivity(intent);
+                return true;
+            } catch (Throwable t) {
+                System.out.println(t);
+                return false;
+            }
+        }
+        protected void onPostExecute(Boolean result) {
+        }
+    }
+
+    private void validateForChart(String start, String end){
+        // how is this gonna  be passed in? Date
+        if (start.length() != 10 || end.length() != 10){
+            Toast.makeText(this, "Please enter a proper date", Toast.LENGTH_LONG).show();
+        } else {
+            chartAsync cAsync = new chartAsync();
+            cAsync.execute(start, end);
+        }
+    }
+    protected class chartAsync extends AsyncTask<String,Void, Boolean> {
+        private long userID = 0;
+        protected Boolean doInBackground(String... strs) {
+            try{
+                System.out.println(strs[0] + " " + strs[1]);
+                Intent intent = new Intent(SearchDatesForChartPage.this, ChartsPage.class);
+                intent.putExtra("sightingsCount", DatabaseHelper.getSightingsCountByMonth(strs[0],  strs[1]));
                 startActivity(intent);
                 return true;
             } catch (Throwable t) {

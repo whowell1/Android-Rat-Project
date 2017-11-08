@@ -43,7 +43,7 @@ public class connectToAPI {
         try{
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            System.out.println("Connection 0000000000000");
+            System.out.println("Connection");
 
             // By default it is GET request
             con.setRequestMethod("GET");
@@ -75,7 +75,7 @@ public class connectToAPI {
 
 
         }catch(Throwable t) {
-            System.out.println(t + "--------------------------------");
+            System.out.println(t);
             return new JSONArray();
         }
 
