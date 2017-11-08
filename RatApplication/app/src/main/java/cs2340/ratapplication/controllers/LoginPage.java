@@ -97,6 +97,7 @@ public class LoginPage extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // CheckPassAysnc connects to the database
     protected class CheckPasswordAsync extends AsyncTask<String,Void, Boolean> {
         private long userID = 0;
         protected Boolean doInBackground(String... strs) {
@@ -107,6 +108,7 @@ public class LoginPage extends AppCompatActivity {
             return validated;
         }
 
+        // when the connection is established succesfully, it should return th
         protected void onPostExecute(Boolean result) {
             if(result == true) {
                 Intent intent = new Intent(LoginPage.this, HomePage.class);

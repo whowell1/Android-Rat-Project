@@ -87,6 +87,7 @@ public class SearchDatesForChartPage extends AppCompatActivity {
         });
     }
 
+    //  class that listens for when startDate is clicked
     public static class DatePickerStartDate extends DialogFragment implements DatePickerDialog.OnDateSetListener{
 
         @Override
@@ -100,6 +101,7 @@ public class SearchDatesForChartPage extends AppCompatActivity {
                     AlertDialog.THEME_DEVICE_DEFAULT_DARK,this,year,month,day);
             return datepickerdialog;
         }
+        // this is the inner class for startDate, handles and gives calendar options
 
         public void onDateSet(DatePicker view, int year, int month, int day){
             TextView textview = (TextView)getActivity().findViewById(R.id.displayStartDate);
@@ -116,6 +118,7 @@ public class SearchDatesForChartPage extends AppCompatActivity {
             start = y + "-" + m + "-" + d;
         }
     }
+    //  class that listens for when endDate is clicked
 
     public static class DatePickerEndDate extends DialogFragment implements DatePickerDialog.OnDateSetListener{
         @Override
@@ -131,6 +134,7 @@ public class SearchDatesForChartPage extends AppCompatActivity {
             return datepickerdialog;
         }
 
+  // this is the inner class for EndDate, handles and gives calendar options
         public void onDateSet(DatePicker view, int year, int month, int day){
             TextView textview2 = (TextView)getActivity().findViewById(R.id.displayEndDate);
             textview2.setText((month+1) + "/" + day + "/"  + year);
@@ -149,7 +153,7 @@ public class SearchDatesForChartPage extends AppCompatActivity {
     }
 
 
-
+//
     private void validateForMap(String start, String end){
         // how is this gonna  be passed in? Date
         if (start.length() != 10 || end.length() != 10){
@@ -159,6 +163,8 @@ public class SearchDatesForChartPage extends AppCompatActivity {
             mpAsync.execute(start, end);
         }
     }
+
+    //
     protected class mapAsync extends AsyncTask<String,Void, Boolean> {
         private long userID = 0;
         protected Boolean doInBackground(String... strs) {

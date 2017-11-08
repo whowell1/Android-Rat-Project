@@ -94,6 +94,8 @@ public class SignupPage extends AppCompatActivity {
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -109,6 +111,8 @@ public class SignupPage extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    // connects to the database
     protected class addUserAsync extends AsyncTask<String,Void, Long> {
         private String username;
         protected Long doInBackground(String... strs) {
@@ -118,6 +122,7 @@ public class SignupPage extends AppCompatActivity {
 
         }
 
+        // checks if there is valid entry on table
         protected void onPostExecute(Long result) {
             if(result == -1) {
                 Toast.makeText(SignupPage.this,"User already exists", Toast.LENGTH_LONG).show();

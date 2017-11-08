@@ -54,6 +54,8 @@ public class DatabaseHelper {
         return addUser(username, password, false);
 
     }
+
+    // add user to db
     public static long addUser(String username, String password, boolean isAdmin) {
         username = username.trim();
         password = password.trim();
@@ -72,7 +74,7 @@ public class DatabaseHelper {
         }
 
     }
-
+// checks password and username from db
     public static boolean checkPassword(String username, String password) {
         username = username.trim();
         password = password.trim();
@@ -91,6 +93,7 @@ public class DatabaseHelper {
         }
     }
 
+    // vhecks to see is user isAdmin
     public boolean isAdmin(int userID) {
         connectToAPI con = new connectToAPI();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -105,6 +108,8 @@ public class DatabaseHelper {
         }
     }
 
+
+    // gets user id from db
     public static long getUserID(String username) {
         username = username.trim();
 
@@ -121,12 +126,14 @@ public class DatabaseHelper {
         }
     }
 
+    // Add sighting with all except lat and long
 
     public static long addSighting(long userID, String locationType, String address, String city, String borough, int zip) {
 
         return addSighting(userID, new Timestamp(System.currentTimeMillis()).toString().substring(0, 10), locationType, address, city, borough, zip, "0", "0");
     }
 
+    // Add sighting with all information
     public static long addSighting(long userID, String date, String locationType, String address, String city, String borough, int zip, String latitude, String longitude) {
 
         connectToAPI con = new connectToAPI();
@@ -150,7 +157,7 @@ public class DatabaseHelper {
         }
 
     }
-
+// gets all sightin from particular id
     public static Sighting getSighting(long sightingID) {
         connectToAPI con = new connectToAPI();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -179,11 +186,13 @@ public class DatabaseHelper {
         return getAllSightingsFromUser(getUserID(username));
     }
 
+
     public static List<Sighting> getAllSightingsFromUser(long userID) {
         //TO DO
         return null;
     }
 
+    // gets the first 50 recent sighting
     public static Sighting[] get50sightings() {
         connectToAPI con = new connectToAPI();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -215,6 +224,9 @@ public class DatabaseHelper {
             return null;
         }
     }
+
+
+    // connected to query dates to get in range
     public static Sighting[] getSightingsInRange(String start, String end) {
         connectToAPI con = new connectToAPI();
         Map<String, Object> map = new HashMap<String, Object>();
