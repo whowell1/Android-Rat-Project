@@ -22,24 +22,26 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import cs2340.ratapplication.R;
+import cs2340.ratapplication.models.MonthCount;
 
 public class ChartsPage extends AppCompatActivity {
     BarChart barChart;
+    MonthCount[] count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charts);
         barChart =(BarChart) findViewById(R.id.barchart);
-
+        count = (MonthCount[]) getIntent().getSerializableExtra("sightingsCount");
 
         List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0f, 30f));
-        entries.add(new BarEntry(1f, 80f));
-        entries.add(new BarEntry(2f, 60f));
-        entries.add(new BarEntry(3f, 50f));
-        entries.add(new BarEntry(5f, 70f));
-        entries.add(new BarEntry(6f, 60f));
+
+        for(int i = 0; i < count.length; i++) {
+            entries.add(new BarEntry(i, count[i].count));
+        }
+
+
 
         BarDataSet set = new BarDataSet(entries, "BarDataSet");
         BarData data = new BarData(set);
