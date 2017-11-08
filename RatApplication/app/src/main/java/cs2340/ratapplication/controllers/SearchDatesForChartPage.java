@@ -32,10 +32,13 @@ public class SearchDatesForChartPage extends AppCompatActivity {
     private EditText startDateCharts;
     private EditText endDateCharts;
 
-    Button datepickerdialogbutton;
-    TextView selecteddate;
-    Button datepickerdialogbutton2;
-    TextView selecteddate2;
+    protected static String start;
+    protected static String end;
+
+    private Button datepickerdialogbutton;
+    private TextView selecteddate;
+    private Button datepickerdialogbutton2;
+    private TextView selecteddate2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +58,7 @@ public class SearchDatesForChartPage extends AppCompatActivity {
         searchForSighting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MapAsync mpAsync = new MapAsync();
-                mpAsync.execute();
+                validateForMap(start, end);
             }
         });
         searchForCharts.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +104,16 @@ public class SearchDatesForChartPage extends AppCompatActivity {
         public void onDateSet(DatePicker view, int year, int month, int day){
             TextView textview = (TextView)getActivity().findViewById(R.id.displayStartDate);
             textview.setText((month+1) + "/" + day + "/"  + year);
+            String y = year + "";
+            String m = month + "";
+            String d = day + "";
+            if(m.length() < 2) {
+                m = "0" + m;
+            }
+            if(d.length() < 2) {
+                d = "0" + d;
+            }
+            start = y + "-" + m + "-" + d;
         }
     }
 
@@ -122,23 +134,37 @@ public class SearchDatesForChartPage extends AppCompatActivity {
         public void onDateSet(DatePicker view, int year, int month, int day){
             TextView textview2 = (TextView)getActivity().findViewById(R.id.displayEndDate);
             textview2.setText((month+1) + "/" + day + "/"  + year);
+
+            String y = year + "";
+            String m = month + "";
+            String d = day + "";
+            if(m.length() < 2) {
+                m = "0" + m;
+            }
+            if(d.length() < 2) {
+                d = "0" + d;
+            }
+            end = y + "-" + m + "-" + d;
         }
     }
 
 
 
-    private void validate(String startDate, String endDate){
+    private void validateForMap(String start, String end){
         // how is this gonna  be passed in? Date
-        if (startDate.matches("[a-zA-Z]+") || endDate.matches("[a-zA-Z]+")){
+        if (start.length() != 10 || end.length() != 10){
             Toast.makeText(this, "Please enter a proper date", Toast.LENGTH_LONG).show();
+        } else {
+            mapAsync mpAsync = new mapAsync();
+            mpAsync.execute(start, end);
         }
     }
-    protected class MapAsync extends AsyncTask<String,Void, Boolean> {
+    protected class mapAsync extends AsyncTask<String,Void, Boolean> {
         private long userID = 0;
         protected Boolean doInBackground(String... strs) {
             try{
                 Intent intent = new Intent(SearchDatesForChartPage.this, MapsActivity.class);
-                intent.putExtra("sightings", DatabaseHelper.get50sightings());
+                intent.putExtra("sightings", DatabaseHelper.getSightingsInRange(strs[0],  strs[1]));
                 startActivity(intent);
                 return true;
             } catch (Throwable t) {

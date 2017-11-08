@@ -184,10 +184,6 @@ public class DatabaseHelper {
         return null;
     }
 
-    public static List<Sighting> getAllSightings() {
-        //TO DO
-        return null;
-    }
     public static Sighting[] get50sightings() {
         connectToAPI con = new connectToAPI();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -196,6 +192,39 @@ public class DatabaseHelper {
             JSONArray response =  con.sendingGetRequest("get50Sightings", map);
             System.out.println(response);
             Sighting[] sightings = new Sighting[50];
+            int count = 0;
+            for(int i = 0; i < response.length(); i++) {
+                JSONObject json = response.getJSONObject(i);
+                Sighting sighting =  new Sighting();
+                sighting.sightingID = json.getLong(KEY_SIGHTING_ID);
+                sighting.userID = json.getInt(KEY_SIGHTINGS_USER_ID_FK);
+                sighting.locationType = json.getString(KEY_SIGHTINGS_LOC);
+                sighting.address = json.getString(KEY_SIGHTINGS_ADDRESS);
+                sighting.city = json.getString(KEY_SIGHTINGS_CITY);
+                sighting.borough = json.getString(KEY_SIGHTINGS_BOROUGH);
+                sighting.zip = json.getInt(KEY_SIGHTINGS_ZIP);
+                sighting.longitude = json.getDouble(KEY_SIGHTINGS_LONG);
+                sighting.latitude = json.getDouble(KEY_SIGHTINGS_LAT);
+                sightings[count] = sighting;
+                count++;
+            }
+            return sightings;
+
+        }catch(Throwable t) {
+            System.out.println(t);
+            return null;
+        }
+    }
+    public static Sighting[] getSightingsInRange(String start, String end) {
+        connectToAPI con = new connectToAPI();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("start", start);
+        map.put("end", end);
+
+        try {
+            JSONArray response =  con.sendingGetRequest("getSightingsInRange", map);
+            System.out.println(response);
+            Sighting[] sightings = new Sighting[response.length()];
             int count = 0;
             for(int i = 0; i < response.length(); i++) {
                 JSONObject json = response.getJSONObject(i);
