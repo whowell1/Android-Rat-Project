@@ -2,31 +2,20 @@ package cs2340.ratapplication.controllers;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
+
 import java.util.*;
 
-import com.github.mikephil.charting.*;
-
-import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
-import java.util.ArrayList;
 import cs2340.ratapplication.R;
 import cs2340.ratapplication.models.MonthCount;
 
 public class ChartsPage extends AppCompatActivity {
-    BarChart barChart;
-    MonthCount[] count;
+    private BarChart barChart;
+    private MonthCount[] count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

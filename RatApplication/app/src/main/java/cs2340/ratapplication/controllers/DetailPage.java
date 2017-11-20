@@ -8,14 +8,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import cs2340.ratapplication.models.*;
 
-import org.w3c.dom.Text;
-
 import cs2340.ratapplication.R;
-import cs2340.ratapplication.models.DatabaseHelper;
 
 public class DetailPage extends AppCompatActivity {
     private TextView Details;
@@ -46,7 +42,7 @@ public class DetailPage extends AppCompatActivity {
 
     }
 
-    protected class DisplayDetailAsync extends AsyncTask<String,Void, Sighting> {
+    private class DisplayDetailAsync extends AsyncTask<String,Void, Sighting> {
         protected Sighting doInBackground(String... strs) {
             return DatabaseHelper.getSighting(getIntent().getIntExtra("sightingID", 0));
         }

@@ -2,10 +2,8 @@ package cs2340.ratapplication;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import static android.support.test.espresso.Espresso.onView;
+
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
 
 import org.junit.Rule;
 import org.junit.Test;

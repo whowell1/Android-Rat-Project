@@ -1,13 +1,7 @@
 package cs2340.ratapplication.controllers;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
-import cs2340.ratapplication.R;
+
 import cs2340.ratapplication.models.DatabaseHelper;
 
 import android.content.Intent;
@@ -32,8 +26,8 @@ public class SearchDatesForChartPage extends AppCompatActivity {
     private EditText startDateCharts;
     private EditText endDateCharts;
 
-    protected static String start;
-    protected static String end;
+    private static String start;
+    private static String end;
 
     private Button datepickerdialogbutton;
     private TextView selecteddate;
@@ -164,7 +158,7 @@ public class SearchDatesForChartPage extends AppCompatActivity {
     }
 
     //
-    protected class mapAsync extends AsyncTask<String,Void, Boolean> {
+    private class mapAsync extends AsyncTask<String,Void, Boolean> {
         private long userID = 0;
         protected Boolean doInBackground(String... strs) {
             try{
@@ -190,7 +184,7 @@ public class SearchDatesForChartPage extends AppCompatActivity {
             cAsync.execute(start, end);
         }
     }
-    protected class chartAsync extends AsyncTask<String,Void, Boolean> {
+    private class chartAsync extends AsyncTask<String,Void, Boolean> {
         private long userID = 0;
         protected Boolean doInBackground(String... strs) {
             try{

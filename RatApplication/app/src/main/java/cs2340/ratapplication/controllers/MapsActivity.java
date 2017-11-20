@@ -4,10 +4,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
 import cs2340.ratapplication.R;
-import cs2340.ratapplication.models.DatabaseHelper;
 import cs2340.ratapplication.models.Sighting;
-
-import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

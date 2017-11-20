@@ -1,21 +1,14 @@
 package cs2340.ratapplication.models;
 
 //import android.database.sqlite.SQLiteOpenHelper;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.*;
-import android.content.Context;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 /**
  * Created by thoma on 10/9/2017.
@@ -61,7 +54,7 @@ public class DatabaseHelper {
         password = password.trim();
 
         connectToAPI con = new connectToAPI();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put(KEY_USER_NAME, username);
         map.put(KEY_USER_PASSWORD, password);
         map.put(KEY_USER_ISADMIN, Boolean.toString(isAdmin));
@@ -80,7 +73,7 @@ public class DatabaseHelper {
         password = password.trim();
 
         connectToAPI con = new connectToAPI();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put(KEY_USER_NAME, username);
         map.put(KEY_USER_PASSWORD, password);
 
@@ -96,7 +89,7 @@ public class DatabaseHelper {
     // vhecks to see is user isAdmin
     public boolean isAdmin(int userID) {
         connectToAPI con = new connectToAPI();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put(KEY_USER_ID, userID);
 
         try {
@@ -114,7 +107,7 @@ public class DatabaseHelper {
         username = username.trim();
 
         connectToAPI con = new connectToAPI();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put(KEY_USER_NAME, username);
 
         try {
@@ -130,14 +123,14 @@ public class DatabaseHelper {
 
     public static long addSighting(long userID, String locationType, String address, String city, String borough, int zip) {
 
-        return addSighting(userID, new Timestamp(System.currentTimeMillis()).toString().substring(0, 10), locationType, address, city, borough, zip, "0", "0");
+        return addSighting(userID, new Timestamp(System.currentTimeMillis()).toString().substring(0, 10), locationType, address, city, borough, zip);
     }
 
     // Add sighting with all information
-    public static long addSighting(long userID, String date, String locationType, String address, String city, String borough, int zip, String latitude, String longitude) {
+    private static long addSighting(long userID, String date, String locationType, String address, String city, String borough, int zip) {
 
         connectToAPI con = new connectToAPI();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put(KEY_SIGHTINGS_USER_ID_FK, userID);
         map.put(KEY_SIGHTINGS_DATE, date);
         map.put(KEY_SIGHTINGS_LOC, locationType);
@@ -145,8 +138,8 @@ public class DatabaseHelper {
         map.put(KEY_SIGHTINGS_CITY, city);
         map.put(KEY_SIGHTINGS_BOROUGH, borough);
         map.put(KEY_SIGHTINGS_ZIP, zip);
-        map.put(KEY_SIGHTINGS_LONG, longitude);
-        map.put(KEY_SIGHTINGS_LAT, latitude);
+        map.put(KEY_SIGHTINGS_LONG, "0");
+        map.put(KEY_SIGHTINGS_LAT, "0");
 
         try {
             JSONObject json = con.sendingPostRequest("addSighting", map).getJSONObject(0);
@@ -160,7 +153,7 @@ public class DatabaseHelper {
 // gets all sightin from particular id
     public static Sighting getSighting(long sightingID) {
         connectToAPI con = new connectToAPI();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put(KEY_USER_ID, sightingID);
 
         try {
@@ -187,7 +180,7 @@ public class DatabaseHelper {
     }
 
 
-    public static List<Sighting> getAllSightingsFromUser(long userID) {
+    private static List<Sighting> getAllSightingsFromUser(long userID) {
         //TO DO
         return null;
     }
@@ -195,7 +188,7 @@ public class DatabaseHelper {
     // gets the first 50 recent sighting
     public static Sighting[] get50sightings() {
         connectToAPI con = new connectToAPI();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
 
         try {
             JSONArray response =  con.sendingGetRequest("get50Sightings", map);
@@ -229,7 +222,7 @@ public class DatabaseHelper {
     // connected to query dates to get in range
     public static Sighting[] getSightingsInRange(String start, String end) {
         connectToAPI con = new connectToAPI();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("start", start);
         map.put("end", end);
 
@@ -262,7 +255,7 @@ public class DatabaseHelper {
 
     public static MonthCount[] getSightingsCountByMonth(String start, String end) {
         connectToAPI con = new connectToAPI();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("start", start);
         map.put("end", end);
 

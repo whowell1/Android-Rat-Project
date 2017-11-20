@@ -98,7 +98,7 @@ public class LoginPage extends AppCompatActivity {
     }
 
     // CheckPassAysnc connects to the database
-    protected class CheckPasswordAsync extends AsyncTask<String,Void, Boolean> {
+    class CheckPasswordAsync extends AsyncTask<String,Void, Boolean> {
         private long userID = 0;
         protected Boolean doInBackground(String... strs) {
             boolean validated = DatabaseHelper.checkPassword(strs[0], strs[1]);
@@ -110,7 +110,7 @@ public class LoginPage extends AppCompatActivity {
 
         // when the connection is established succesfully, it should return th
         protected void onPostExecute(Boolean result) {
-            if(result == true) {
+            if(result) {
                 Intent intent = new Intent(LoginPage.this, HomePage.class);
                 System.out.println(userID);
                 intent.putExtra("userID", userID);

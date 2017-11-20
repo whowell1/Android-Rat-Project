@@ -3,9 +3,8 @@ package cs2340.ratapplication.models;
 /**
  * Created by thoma on 11/1/2017.
  */
-        import android.os.AsyncTask;
 
-        import org.json.JSONArray;
+import org.json.JSONArray;
 
         import java.io.BufferedReader;
         import java.io.InputStreamReader;
@@ -16,7 +15,7 @@ package cs2340.ratapplication.models;
 /**
  * @author Thomas Olson
  */
-public class connectToAPI {
+class connectToAPI {
 
     private final String USER_AGENT = "Mozilla/5.0";
 
@@ -62,7 +61,7 @@ public class connectToAPI {
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(con.getInputStream()));
             String output;
-            StringBuffer response = new StringBuffer();
+            StringBuilder response = new StringBuilder();
 
             while ((output = in.readLine()) != null) {
                 response.append(output);
@@ -113,7 +112,7 @@ public class connectToAPI {
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(con.getInputStream()));
             String output;
-            StringBuffer response = new StringBuffer();
+            StringBuilder response = new StringBuilder();
 
             while ((output = in.readLine()) != null) {
                 response.append(output);

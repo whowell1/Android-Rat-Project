@@ -12,12 +12,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.net.URISyntaxException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-import java.io.FileNotFoundException;
 
 import cs2340.ratapplication.models.DatabaseHelper;
 import cs2340.ratapplication.R;
@@ -92,10 +88,10 @@ public class HomePage extends AppCompatActivity {
             textView.setText("Admin Account");
         }*/
     }
-    protected void displayData() {
+    private void displayData() {
             Sighting[] sightings = DatabaseHelper.get50sightings();
-            List<String> sightingsNum = new ArrayList<String>();
-            for(int i = 0; i< sightings.length; i++) {
+            List<String> sightingsNum = new ArrayList<>();
+            for(int i = 0; i< (sightings != null ? sightings.length : 0); i++) {
                 sightingsNum.add("Sighting #" + sightings[i].sightingID);
             }
 
@@ -116,7 +112,7 @@ public class HomePage extends AppCompatActivity {
                 }
             });
     }
-    protected class DisplayDataAsync extends AsyncTask<String,Void, Boolean> {
+    private class DisplayDataAsync extends AsyncTask<String,Void, Boolean> {
         private long userID = 0;
         protected Boolean doInBackground(String... strs) {
             try{

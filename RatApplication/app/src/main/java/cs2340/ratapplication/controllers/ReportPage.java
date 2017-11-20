@@ -69,7 +69,7 @@ public class ReportPage extends AppCompatActivity {
         }
     }
 
-    protected class AddReportAsync extends AsyncTask<String,Void, Long> {
+    private class AddReportAsync extends AsyncTask<String,Void, Long> {
         protected Long doInBackground(String... strs) {
              return DatabaseHelper.addSighting(Long.parseLong(strs[0]), strs[1], strs[2], strs[3], strs[4], Integer.parseInt(strs[5]));
         }

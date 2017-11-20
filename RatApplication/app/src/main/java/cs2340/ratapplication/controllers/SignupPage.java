@@ -13,8 +13,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ArrayAdapter;
 
-import org.json.JSONObject;
-
 import cs2340.ratapplication.R;
 import cs2340.ratapplication.models.DatabaseHelper;
 
@@ -113,7 +111,7 @@ public class SignupPage extends AppCompatActivity {
 
 
     // connects to the database
-    protected class addUserAsync extends AsyncTask<String,Void, Long> {
+    class addUserAsync extends AsyncTask<String,Void, Long> {
         private String username;
         protected Long doInBackground(String... strs) {
             username = strs[0];
