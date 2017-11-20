@@ -16,9 +16,6 @@ import android.widget.ArrayAdapter;
 import cs2340.ratapplication.R;
 import cs2340.ratapplication.models.DatabaseHelper;
 
-/**
- * Created by thoma on 9/29/2017.
- */
 
 public class SignupPage extends AppCompatActivity {
 

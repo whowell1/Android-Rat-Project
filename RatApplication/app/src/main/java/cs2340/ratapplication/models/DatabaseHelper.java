@@ -10,19 +10,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by thoma on 10/9/2017.
- */
+
 
 public class DatabaseHelper {
-    private static DatabaseHelper sInstance;
-
-    private static final String DATABASE_NAME = "ratappdb";
-    private static final int DATABASE_VERSION = 1;
-
-    // Table Names
-    private static final String TABLE_USERS = "users";
-    private static final String TABLE_SIGHTINGS = "sightings";
+//    private static DatabaseHelper sInstance;
+//
+//    private static final String DATABASE_NAME = "ratappdb";
+//    private static final int DATABASE_VERSION = 1;
+//
+//    // Table Names
+//    private static final String TABLE_USERS = "users";
+//    private static final String TABLE_SIGHTINGS = "sightings";
 
 
     // Sightings Table Columns
@@ -62,7 +60,6 @@ public class DatabaseHelper {
             JSONObject json = con.sendingPostRequest("addUser", map).getJSONObject(0);
             return json.getLong("insertId");
         }catch(Throwable t) {
-            System.out.println(t);
             return -1;
         }
 
@@ -81,7 +78,6 @@ public class DatabaseHelper {
             JSONObject json = con.sendingGetRequest("checkPassword", map).getJSONObject(0);
             return json.getBoolean("validated");
         }catch(Throwable t) {
-            System.out.println(t);
             return false;
         }
     }
@@ -96,7 +92,6 @@ public class DatabaseHelper {
             JSONObject json = con.sendingGetRequest("isAdmin", map).getJSONObject(0);
             return json.getBoolean("isAdmin");
         }catch(Throwable t) {
-            System.out.println(t);
             return false;
         }
     }
@@ -114,7 +109,6 @@ public class DatabaseHelper {
             JSONObject json = con.sendingGetRequest("getUserID", map).getJSONObject(0);
             return json.getLong("id");
         }catch(Throwable t) {
-            System.out.println(t);
             return -1;
         }
     }
@@ -145,7 +139,6 @@ public class DatabaseHelper {
             JSONObject json = con.sendingPostRequest("addSighting", map).getJSONObject(0);
             return json.getLong("insertId");
         }catch(Throwable t) {
-            System.out.println(t);
             return -1;
         }
 
@@ -171,7 +164,6 @@ public class DatabaseHelper {
             return sighting;
 
         }catch(Throwable t) {
-            System.out.println(t);
             return null;
         }
     }
@@ -213,7 +205,6 @@ public class DatabaseHelper {
             return sightings;
 
         }catch(Throwable t) {
-            System.out.println(t);
             return null;
         }
     }
@@ -248,7 +239,6 @@ public class DatabaseHelper {
             return sightings;
 
         }catch(Throwable t) {
-            System.out.println(t);
             return null;
         }
     }
@@ -276,7 +266,6 @@ public class DatabaseHelper {
             return count;
 
         }catch(Throwable t) {
-            System.out.println(t);
             return null;
         }
     }

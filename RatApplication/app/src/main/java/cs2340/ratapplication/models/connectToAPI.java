@@ -30,7 +30,7 @@ class connectToAPI {
             try {
                 getArgs += key + "=" + params.get(key) + "&";
             }catch(Throwable t) {
-                System.out.println(t);
+                return null;
             }
 
         }
@@ -72,7 +72,6 @@ class connectToAPI {
 
 
         }catch(Throwable t) {
-            System.out.println(t);
             return new JSONArray();
         }
 
@@ -123,7 +122,6 @@ class connectToAPI {
             return new JSONArray(response.toString());
 
         }catch(Throwable t) {
-            System.out.println(t);
             return new JSONArray();
         }
 
