@@ -20,8 +20,8 @@ public class SightingInformation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sighting_information);
-        seeSightingBtn = (Button) findViewById(R.id.seeSightingBtn);
-        seeSightingGraphBtn = (Button) findViewById(R.id.seeSightingGraphBtn);
+        seeSightingBtn = findViewById(R.id.seeSightingBtn);
+        seeSightingGraphBtn = findViewById(R.id.seeSightingGraphBtn);
 
 
 

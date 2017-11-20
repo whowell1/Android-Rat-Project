@@ -32,7 +32,7 @@ public class HomePage extends AppCompatActivity {
     private Button Logout;
     private Button Report;
     private Button sightingInfoBtn;
-    private TextView textView;
+//    private TextView textView;
     private long userID;
     private ListView listView;
 
@@ -44,12 +44,12 @@ public class HomePage extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         userID = getIntent().getLongExtra("userID", 0);
-        sightingInfoBtn = (Button) findViewById(R.id.sightingInfoBtn);
+        sightingInfoBtn = findViewById(R.id.sightingInfoBtn);
 
-        textView = (TextView) findViewById(R.id.isAdmin);
-        Logout = (Button) findViewById(R.id.logoutBtn);
-        Report = (Button) findViewById(R.id.reportBtn);
-        listView = (ListView) findViewById(R.id.reportList);
+//        textView = (TextView) findViewById(R.id.isAdmin);
+        Logout = findViewById(R.id.logoutBtn);
+        Report = findViewById(R.id.reportBtn);
+        listView = findViewById(R.id.reportList);
         System.out.println(userID);
 
 

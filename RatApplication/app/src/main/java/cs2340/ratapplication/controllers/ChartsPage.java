@@ -21,7 +21,7 @@ public class ChartsPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charts);
-        barChart =(BarChart) findViewById(R.id.barchart);
+        barChart = findViewById(R.id.barchart);
         count = (MonthCount[]) getIntent().getSerializableExtra("sightingsCount");
 
         List<BarEntry> entries = new ArrayList<>();

@@ -25,8 +25,8 @@ public class DetailPage extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         userID = getIntent().getLongExtra("userID",0);
 
-        Details = (TextView) findViewById(R.id.sightingIDView);
-        Back = (Button) findViewById(R.id.backBtn);
+        Details = findViewById(R.id.sightingIDView);
+        Back = findViewById(R.id.backBtn);
 
         Back.setOnClickListener(new View.OnClickListener() {
 

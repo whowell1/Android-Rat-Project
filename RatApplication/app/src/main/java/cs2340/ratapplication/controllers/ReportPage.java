@@ -26,13 +26,13 @@ public class ReportPage extends AppCompatActivity {
         setContentView(R.layout.activity_report);
         userID = getIntent().getLongExtra("userID", 0);
         System.out.println("UserID: " + userID);
-        LocationType = (EditText) findViewById(R.id.LocationType);
-        Address = (EditText) findViewById(R.id.Address);
-        City = (EditText) findViewById(R.id.City);
-        Borough = (EditText) findViewById(R.id.Borough);
-        ZipCode = (EditText) findViewById(R.id.ZipCode);
-        Submit = (Button) findViewById(R.id.SubmitBtn);
-        Cancel = (Button) findViewById(R.id.CancelBtn);
+        LocationType = findViewById(R.id.LocationType);
+        Address = findViewById(R.id.Address);
+        City = findViewById(R.id.City);
+        Borough = findViewById(R.id.Borough);
+        ZipCode = findViewById(R.id.ZipCode);
+        Submit = findViewById(R.id.SubmitBtn);
+        Cancel = findViewById(R.id.CancelBtn);
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

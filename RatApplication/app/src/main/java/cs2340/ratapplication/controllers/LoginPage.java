@@ -36,10 +36,10 @@ public class LoginPage extends AppCompatActivity {
         //dbHelper.destroyPreviousDB();
 
 
-        Name = (EditText) findViewById(R.id.etName);
-        Password = (EditText) findViewById(R.id.etPassword);
-        Info = (TextView) findViewById(R.id.numAttempts);
-        Login = (Button) findViewById(R.id.loginBtn);
+        Name = findViewById(R.id.etName);
+        Password = findViewById(R.id.etPassword);
+        Info = findViewById(R.id.numAttempts);
+        Login = findViewById(R.id.loginBtn);
 
         Info.setText("");
 
@@ -50,7 +50,7 @@ public class LoginPage extends AppCompatActivity {
             }
         });
 
-        Signup = (Button) findViewById(R.id.signupBtn);
+        Signup = findViewById(R.id.signupBtn);
 
 
         Signup.setOnClickListener(new View.OnClickListener() {

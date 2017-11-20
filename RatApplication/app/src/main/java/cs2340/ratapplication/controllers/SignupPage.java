@@ -37,10 +37,10 @@ public class SignupPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        Name = (EditText)findViewById(R.id.etName);
-        Password= (EditText)findViewById(R.id.etPassword);
-        Signup = (Button) findViewById(R.id.signupBtn);
-        Back = (Button) findViewById(R.id.backBtn);
+        Name = findViewById(R.id.etName);
+        Password= findViewById(R.id.etPassword);
+        Signup = findViewById(R.id.signupBtn);
+        Back = findViewById(R.id.backBtn);
 
         Signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +58,7 @@ public class SignupPage extends AppCompatActivity {
         });
 
 
-        AdminSpinner = (Spinner) findViewById(R.id.adminSpinner);
+        AdminSpinner = findViewById(R.id.adminSpinner);
         String[] adminArr = {"User", "Admin"};
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, adminArr);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

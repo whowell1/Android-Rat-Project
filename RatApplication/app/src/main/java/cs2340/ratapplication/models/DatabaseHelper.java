@@ -86,7 +86,7 @@ public class DatabaseHelper {
         }
     }
 
-    // vhecks to see is user isAdmin
+    // checks to see is user isAdmin
     public boolean isAdmin(int userID) {
         connectToAPI con = new connectToAPI();
         Map<String, Object> map = new HashMap<>();

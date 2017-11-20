@@ -38,16 +38,16 @@ public class SearchDatesForChartPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_dates_for_chart);
-        searchForSighting = (Button) findViewById(R.id.searchForSighting);
-        searchForCharts = (Button) findViewById(R.id.searchForCharts);
+        searchForSighting = findViewById(R.id.searchForSighting);
+        searchForCharts = findViewById(R.id.searchForCharts);
 //        startDateCharts = (EditText) findViewById(R.id.startDateCharts);
 //        endDateCharts = (EditText) findViewById(R.id.endDateCharts);
 
 
-        datepickerdialogbutton = (Button)findViewById(R.id.startDate);
-        selecteddate = (TextView)findViewById(R.id.displayStartDate);
-        datepickerdialogbutton2 = (Button)findViewById(R.id.endDate);
-        selecteddate2 = (TextView)findViewById(R.id.displayEndDate);
+        datepickerdialogbutton = findViewById(R.id.startDate);
+        selecteddate = findViewById(R.id.displayStartDate);
+        datepickerdialogbutton2 = findViewById(R.id.endDate);
+        selecteddate2 = findViewById(R.id.displayEndDate);
 
         searchForSighting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +96,7 @@ public class SearchDatesForChartPage extends AppCompatActivity {
         // this is the inner class for startDate, handles and gives calendar options
 
         public void onDateSet(DatePicker view, int year, int month, int day){
-            TextView textview = (TextView)getActivity().findViewById(R.id.displayStartDate);
+            TextView textview = getActivity().findViewById(R.id.displayStartDate);
             textview.setText((month+1) + "/" + day + "/"  + year);
             String y = year + "";
             String m = month + "";
@@ -120,15 +120,13 @@ public class SearchDatesForChartPage extends AppCompatActivity {
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog datepickerdialog = new DatePickerDialog(getActivity(),
-                    AlertDialog.THEME_DEVICE_DEFAULT_DARK,this,year,month,day);
-
-            return datepickerdialog;
+            return new DatePickerDialog(getActivity(),
+                    AlertDialog.THEME_DEVICE_DEFAULT_DARK, this,year,month,day);
         }
 
   // this is the inner class for EndDate, handles and gives calendar options
         public void onDateSet(DatePicker view, int year, int month, int day){
-            TextView textview2 = (TextView)getActivity().findViewById(R.id.displayEndDate);
+            TextView textview2 = getActivity().findViewById(R.id.displayEndDate);
             textview2.setText((month+1) + "/" + day + "/"  + year);
 
             String y = year + "";
