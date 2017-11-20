@@ -52,8 +52,8 @@ public class SignInJUnit
     @Test
     public void success() {
 
-        onView(withId(R.id.etName)).perform(typeText("Ross"));
-        onView(withId(R.id.etPassword)).perform(typeText("3"));
+        onView(withId(R.id.etName)).perform(typeText("wrentarohowell@gmail.com"));
+        onView(withId(R.id.etPassword)).perform(typeText("58635863"));
         onView(withId(R.id.signupBtn)).perform(click());
         closeSoftKeyboard();
 
