@@ -90,9 +90,8 @@ public class SearchDatesForChartPage extends AppCompatActivity {
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog datepickerdialog = new DatePickerDialog(getActivity(),
-                    AlertDialog.THEME_DEVICE_DEFAULT_DARK,this,year,month,day);
-            return datepickerdialog;
+            return new DatePickerDialog(getActivity(),
+                    AlertDialog.THEME_DEVICE_DEFAULT_DARK, this,year,month,day);
         }
         // this is the inner class for startDate, handles and gives calendar options
 
